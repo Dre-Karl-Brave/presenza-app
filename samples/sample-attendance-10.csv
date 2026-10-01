@@ -1,0 +1,11 @@
+student number,student name,subject code,section,date,time in,time out,status,class start,class end
+2026-00001,"Santos, Maria",IT301,BSIT 3-A,2026-08-17,08:55,10:00,present,09:00,10:00
+2026-00002,Juan Cruz,IT301,BSIT 3-A,2026-08-17,09:12,10:00,late,09:00,10:00
+2026-00003,"Reyes, Ana",IT301,BSIT 3-A,2026-08-17,,,absent,09:00,10:00
+2026-00004,Luis Garcia,IT301,BSIT 3-A,2026-08-17,08:58,10:00,present,09:00,10:00
+2026-00005,"Lim, Carla",IT301,BSIT 3-A,2026-08-17,,,excused,09:00,10:00
+2026-00001,"Santos, Maria",IT302,BSIT 3-A,2026-08-19,12:57,14:30,present,13:00,14:30
+2026-00002,Juan Cruz,IT302,BSIT 3-A,2026-08-19,13:20,14:30,late,13:00,14:30
+2026-00003,"Reyes, Ana",IT302,BSIT 3-A,2026-08-19,12:59,14:30,present,13:00,14:30
+2026-00004,Luis Garcia,IT302,BSIT 3-A,2026-08-19,,,absent,13:00,14:30
+2026-00005,"Lim, Carla",IT302,BSIT 3-A,2026-08-19,13:05,14:30,late,13:00,14:30

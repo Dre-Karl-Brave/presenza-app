@@ -10,6 +10,8 @@ import {
   unique,
   index,
 } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
+import { importBatches } from "./imports";
 import {
   sessionStatusEnum,
   attendanceStatusEnum,
@@ -44,8 +46,10 @@ export const classSessions = pgTable(
 
     // Time grains for filtering - fill these in the seeder
     startHour: smallint("start_hour").notNull(), // 0-23
+    dayOfWeek: smallint("day_of_week").notNull(), // 1 = Monday ... 7 = Sunday
     weekStart: date("week_start").notNull(), // Monday of that week
     monthStart: date("month_start").notNull(), // 1st of that month
+    ...softDelete,
   },
   (table) => [
     unique().on(table.classId, table.scheduledStart),
@@ -53,6 +57,7 @@ export const classSessions = pgTable(
     index("class_sessions_week_start_idx").on(table.weekStart),
     index("class_sessions_month_start_idx").on(table.monthStart),
     index("class_sessions_start_hour_idx").on(table.startHour),
+    index("class_sessions_day_of_week_idx").on(table.dayOfWeek),
     index("class_sessions_class_id_idx").on(table.classId),
   ],
 );
@@ -80,11 +85,17 @@ export const attendanceLogs = pgTable(
     minutesInClass: integer("minutes_in_class"), // timeOut - timeIn
     timeInHour: smallint("time_in_hour"), // hour of timeIn
     timeOutHour: smallint("time_out_hour"), // hour of timeOut
+
+    // Set when the log was created or last changed by a file import
+    importBatchId: integer("import_batch_id").references(() => importBatches.id),
+    ...softDelete,
   },
   (table) => [
     unique().on(table.sessionId, table.studentId),
     index("attendance_logs_student_id_idx").on(table.studentId),
     index("attendance_logs_status_idx").on(table.status),
+    index("attendance_logs_import_batch_id_idx").on(table.importBatchId),
+    index("attendance_logs_session_id_status_idx").on(table.sessionId, table.status),
     index("attendance_logs_time_in_hour_idx").on(table.timeInHour),
   ],
 );

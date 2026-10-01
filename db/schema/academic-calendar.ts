@@ -1,4 +1,5 @@
 import { pgTable, serial, integer, smallint, varchar, boolean, date, unique, index } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { termTypeEnum, gradingPeriodEnum, eventTypeEnum } from "./enums";
 
 export const academicYears = pgTable("academic_years", {
@@ -6,6 +7,7 @@ export const academicYears = pgTable("academic_years", {
   label: varchar("label", { length: 20 }).notNull().unique(), // "2026-2027"
   startDate: date("start_date").notNull(),
   endDate: date("end_date").notNull(),
+  ...softDelete,
 });
 
 export const terms = pgTable(
@@ -20,6 +22,7 @@ export const terms = pgTable(
     endDate: date("end_date").notNull(),
     midtermStart: date("midterm_start"),
     finalsStart: date("finals_start"),
+    ...softDelete,
   },
   (table) => [unique().on(table.academicYearId, table.termType)],
 );
@@ -42,6 +45,7 @@ export const calendarDates = pgTable(
     isWeekend: boolean("is_weekend").notNull(),
     isClassDay: boolean("is_class_day").notNull().default(true),
     period: gradingPeriodEnum("period"),
+    ...softDelete,
   },
   (table) => [
     index("calendar_dates_term_id_idx").on(table.termId),
@@ -58,4 +62,5 @@ export const calendarEvents = pgTable("calendar_events", {
   eventType: eventTypeEnum("event_type").notNull(),
   name: varchar("name", { length: 150 }).notNull(), // "Typhoon Signal No. 2"
   classesCancelled: boolean("classes_cancelled").notNull().default(true),
+  ...softDelete,
 });

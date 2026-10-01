@@ -1,0 +1,11 @@
+student number,student name,subject code,section,date,time in,time out,status,class start,class end
+S001,Ana Reyes,MATH,TP 1-A,2026-13-40,08:00,09:00,present,,
+,Ben Cruz,MATH,TP 1-A,2026-08-03,08:00,09:00,present,,
+S003,Carla Santos,MATH,TP 1-A,2026-08-03,08:00,09:00,sick,,
+S004,Dan Lopez,MATH,TP 1-A,2026-08-03,,,present,,
+S005,Eve Mora,MATH,TP 1-A,2026-08-03,09:00,08:00,present,,
+S006,Fay Tan,MATH,TP 1-A,2026-08-03,08:00,09:00,present,08:00,
+S007,Gus Ong,MATH,TP 1-A,2026-08-03,08:00,09:00,present,,
+S007,Gus Ong,MATH,TP 1-A,2026-08-03,08:05,09:00,late,,
+
+S008,Hal Yu,MATH,TP 1-A,2026-08-03,08:00,09:00,present,,
