@@ -1,0 +1,7 @@
+student number,student name,subject code,section,date,time in,time out,status,class start,class end
+S001,"Reyes, Ana",MATH,TP 1-A,2026-08-03,07:58,09:00,present,08:00,09:00
+S002,Ben Cruz,MATH,TP 1-A,2026-08-03,08:12,09:00,late,08:00,09:00
+S003,Carla Santos,MATH,TP 1-A,2026-08-03,,,absent,08:00,09:00
+S001,"Reyes, Ana",ENG,TP 1-A,2026-08-05,09:55,11:00,present,10:00,11:00
+S002,Ben Cruz,ENG,TP 1-A,2026-08-05,,,absent,10:00,11:00
+S003,Carla Santos,ENG,TP 1-A,2026-08-05,,,excused,10:00,11:00

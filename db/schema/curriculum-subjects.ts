@@ -1,4 +1,5 @@
 import { pgTable, serial, integer, smallint, unique } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { termTypeEnum } from "./enums";
 import { programs } from "./organization";
 import { subjects } from "./classes";
@@ -16,6 +17,7 @@ export const curriculumSubjects = pgTable(
       .references(() => subjects.id),
     yearLevel: smallint("year_level").notNull(),
     termType: termTypeEnum("term_type").notNull(),
+    ...softDelete,
   },
   (table) => [unique().on(table.programId, table.subjectId)],
 );

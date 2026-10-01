@@ -1,4 +1,5 @@
 import { pgTable, serial, integer, date, unique } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { dropReasonEnum } from "./enums";
 import { classes } from "./classes";
 import { students } from "./people";
@@ -17,6 +18,7 @@ export const classEnrollments = pgTable(
     enrolledOn: date("enrolled_on").notNull(),
     droppedOn: date("dropped_on"),
     dropReason: dropReasonEnum("drop_reason"),
+    ...softDelete,
   },
   (table) => [unique().on(table.classId, table.studentId)],
 );

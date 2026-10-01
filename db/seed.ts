@@ -205,6 +205,7 @@ async function main() {
       scheduledEnd: new Date("2026-08-17T10:00:00"),
       sessionStatus: "held",
       startHour: 9,
+      dayOfWeek: 1,
       weekStart: "2026-08-17",
       monthStart: "2026-08-01",
     })

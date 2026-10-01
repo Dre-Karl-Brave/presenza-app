@@ -1,4 +1,5 @@
-import { pgTable, serial, integer, smallint, varchar, time, unique } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, smallint, varchar, time, unique, index } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { subjectTypeEnum, shiftEnum, meetingTypeEnum } from "./enums";
 import { departments, rooms, programs } from "./organization";
 import { terms } from "./academic-calendar";
@@ -15,6 +16,7 @@ export const subjects = pgTable("subjects", {
   subjectType: subjectTypeEnum("subject_type").notNull(),
   lectureUnits: smallint("lecture_units").notNull().default(3),
   labUnits: smallint("lab_units").notNull().default(0),
+  ...softDelete,
 });
 
 // Class section = block of students ("BSIT 3-A", 1st sem 2026)
@@ -33,6 +35,7 @@ export const classSections = pgTable(
     sectionName: varchar("section_name", { length: 30 }).notNull(),
     shift: shiftEnum("shift").notNull().default("day"),
     adviserId: integer("adviser_id").references(() => instructors.id),
+    ...softDelete,
   },
   (table) => [
     unique().on(
@@ -64,23 +67,34 @@ export const classes = pgTable(
     classCode: varchar("class_code", { length: 20 }).notNull().unique(), // "IT301-3A-26S1"
     graceMinutes: smallint("grace_minutes").notNull().default(15),
     maxAbsences: smallint("max_absences").notNull().default(7),
+    ...softDelete,
   },
   (table) => [
     unique().on(table.subjectId, table.classSectionId, table.termId),
+    index("classes_subject_id_idx").on(table.subjectId),
+    index("classes_class_section_id_idx").on(table.classSectionId),
   ],
 );
 
 // Weekly meeting pattern (lecture Monday/Wednesday + laboratory Friday, etc.)
-export const classSchedules = pgTable("class_schedules", {
-  id: serial("class_schedule_id").primaryKey(),
-  classId: integer("class_id")
-    .notNull()
-    .references(() => classes.id, { onDelete: "cascade" }),
-  roomId: integer("room_id")
-    .notNull()
-    .references(() => rooms.id),
-  meetingType: meetingTypeEnum("meeting_type").notNull(),
-  dayOfWeek: smallint("day_of_week").notNull(), // 1 = Monday ... 7 = Sunday
-  startTime: time("start_time", { precision: 0 }).notNull(),
-  endTime: time("end_time", { precision: 0 }).notNull(),
-});
+export const classSchedules = pgTable(
+  "class_schedules",
+  {
+    id: serial("class_schedule_id").primaryKey(),
+    classId: integer("class_id")
+      .notNull()
+      .references(() => classes.id, { onDelete: "cascade" }),
+    roomId: integer("room_id")
+      .notNull()
+      .references(() => rooms.id),
+    meetingType: meetingTypeEnum("meeting_type").notNull(),
+    dayOfWeek: smallint("day_of_week").notNull(), // 1 = Monday ... 7 = Sunday
+    startTime: time("start_time", { precision: 0 }).notNull(),
+    endTime: time("end_time", { precision: 0 }).notNull(),
+    ...softDelete,
+  },
+  (table) => [
+    index("class_schedules_class_id_idx").on(table.classId),
+    index("class_schedules_day_of_week_idx").on(table.dayOfWeek),
+  ],
+);

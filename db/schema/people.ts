@@ -1,4 +1,5 @@
 import { pgTable, serial, integer, smallint, varchar, index } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import {
   employmentTypeEnum,
   sexEnum,
@@ -17,6 +18,7 @@ export const instructors = pgTable("instructors", {
   firstName: varchar("first_name", { length: 50 }).notNull(),
   lastName: varchar("last_name", { length: 50 }).notNull(),
   employmentType: employmentTypeEnum("employment_type").notNull(),
+  ...softDelete,
 });
 
 export const students = pgTable(
@@ -34,6 +36,7 @@ export const students = pgTable(
     studentType: studentTypeEnum("student_type").notNull().default("regular"),
     residenceType: residenceTypeEnum("residence_type"),
     status: studentStatusEnum("status").notNull().default("active"),
+    ...softDelete,
   },
   (table) => [index("students_program_id_idx").on(table.programId)],
 );

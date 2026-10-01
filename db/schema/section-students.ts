@@ -1,4 +1,5 @@
 import { pgTable, integer, primaryKey } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { classSections } from "./classes";
 import { students } from "./people";
 
@@ -12,6 +13,7 @@ export const sectionStudents = pgTable(
     studentId: integer("student_id")
       .notNull()
       .references(() => students.id),
+    ...softDelete,
   },
   (table) => [
     primaryKey({ columns: [table.classSectionId, table.studentId] }),

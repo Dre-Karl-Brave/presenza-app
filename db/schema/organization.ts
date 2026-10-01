@@ -1,10 +1,12 @@
 import { pgTable, serial, integer, smallint, varchar } from "drizzle-orm/pg-core";
+import { softDelete } from "./columns";
 import { roomTypeEnum } from "./enums";
 
 export const departments = pgTable("departments", {
   id: serial("department_id").primaryKey(),
   code: varchar("code", { length: 10 }).notNull().unique(), // "CCS"
   name: varchar("name", { length: 100 }).notNull(),
+  ...softDelete,
 });
 
 export const programs = pgTable("programs", {
@@ -15,12 +17,14 @@ export const programs = pgTable("programs", {
   code: varchar("code", { length: 15 }).notNull().unique(), // "BSIT"
   name: varchar("name", { length: 150 }).notNull(),
   yearsToComplete: smallint("years_to_complete").notNull().default(4),
+  ...softDelete,
 });
 
 export const buildings = pgTable("buildings", {
   id: serial("building_id").primaryKey(),
   code: varchar("code", { length: 10 }).notNull().unique(),
   name: varchar("name", { length: 100 }).notNull(),
+  ...softDelete,
 });
 
 export const rooms = pgTable("rooms", {
@@ -32,4 +36,5 @@ export const rooms = pgTable("rooms", {
   roomType: roomTypeEnum("room_type").notNull(),
   floor: smallint("floor"),
   capacity: smallint("capacity").notNull(),
+  ...softDelete,
 });
