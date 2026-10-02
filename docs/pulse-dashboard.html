@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse — Overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Geist', system-ui, sans-serif;
+      background: #fafafa;
+      color: #09090b;
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #nav-toggle { display: none; }
+
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      transition: width 0.18s cubic-bezier(0.4,0,0.2,1);
+      overflow: hidden;
+    }
+
+    #nav-toggle:checked ~ .shell .sidebar { width: 60px; }
+
+    #nav-toggle:checked ~ .shell .sidebar .collapse-text,
+    #nav-toggle:checked ~ .shell .sidebar .brand-name,
+    #nav-toggle:checked ~ .shell .sidebar .nav-label,
+    #nav-toggle:checked ~ .shell .sidebar .ws-info { opacity: 0; pointer-events: none; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #52525b;
+      font-weight: 500;
+      font-size: 13.5px;
+      white-space: nowrap;
+      transition: background 0.1s;
+    }
+    .nav-link:hover { background: #f4f4f5; color: #09090b; }
+    .nav-link.active { background: #eff6ff; color: #2563eb; }
+
+    .table-row:nth-child(even) { background: #f4f4f5; }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      margin: 6px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid #e4e4e7;
+      background: #fff;
+      gap: 6px;
+      font-size: 12px;
+      color: #71717a;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background 0.1s;
+    }
+    .toggle-label:hover { background: #f4f4f5; }
+
+    .export-btn {
+      background: #2563eb;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      letter-spacing: 0.1px;
+    }
+    .export-btn:hover { background: #1d4ed8; }
+
+    .page-row { display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid #f4f4f5; position: relative; overflow: hidden; }
+    .page-row:last-child { border-bottom: none; }
+    .page-bar { position: absolute; left: 0; top: 0; bottom: 0; background: #eff6ff; z-index: 0; }
+    .page-row > * { position: relative; z-index: 1; }
+
+    .date-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1px solid #e4e4e7;
+      border-radius: 5px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      color: #374151;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      white-space: nowrap;
+    }
+    .date-pill:hover { background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="nav-toggle">
+
+  <div class="shell" style="display:flex; height:100vh; overflow:hidden;">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar" style="background:#fff; border-right:1px solid #e4e4e7; display:flex; flex-direction:column; height:100vh; position:sticky; top:0;">
+
+      <!-- Brand -->
+      <div style="height:52px; display:flex; align-items:center; padding:0 16px; border-bottom:1px solid #e4e4e7; gap:10px; flex-shrink:0;">
+        <!-- Geometric logo: stacked squares -->
+        <div style="width:22px; height:22px; flex-shrink:0; position:relative;">
+          <div style="width:14px; height:14px; background:#2563eb; border-radius:3px; position:absolute; top:0; left:0;"></div>
+          <div style="width:10px; height:10px; background:#09090b; border-radius:2px; position:absolute; bottom:0; right:0;"></div>
+        </div>
+        <span class="brand-name" style="font-weight:700; font-size:15px; letter-spacing:-0.4px; white-space:nowrap; transition:opacity 0.15s;">Pulse</span>
+      </div>
+
+      <!-- Collapse toggle -->
+      <label for="nav-toggle" class="toggle-label">
+        <div style="display:flex; flex-direction:column; gap:3.5px; flex-shrink:0;">
+          <div style="width:14px; height:1.5px; background:#71717a; border-radius:1px;"></div>
+          <div style="width:10px; height:1.5px; background:#71717a; border-radius:1px;"></div>
+          <div style="width:14px; height:1.5px; background:#71717a; border-radius:1px;"></div>
+        </div>
+        <span class="collapse-text" style="transition:opacity 0.15s; font-size:12px; color:#71717a;">Collapse</span>
+      </label>
+
+      <!-- Nav -->
+      <nav style="padding:6px 8px; display:flex; flex-direction:column; gap:1px; flex:1;">
+
+        <a href="#" class="nav-link active">
+          <div style="width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.5px; width:13px; height:13px;">
+              <div style="background:#2563eb; border-radius:1.5px;"></div>
+              <div style="background:#2563eb; border-radius:1.5px;"></div>
+              <div style="background:#2563eb; border-radius:1.5px;"></div>
+              <div style="background:#2563eb; border-radius:1.5px;"></div>
+            </div>
+          </div>
+          <span class="nav-label">Overview</span>
+        </a>
+
+        <a href="#" class="nav-link">
+          <div style="width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+            <div style="width:13px; height:13px; border:1.5px solid #a1a1aa; border-radius:2px; position:relative;">
+              <div style="position:absolute; top:2px; left:2px; right:2px; height:1.5px; background:#a1a1aa; border-radius:1px;"></div>
+              <div style="position:absolute; top:5.5px; left:2px; width:5px; height:1.5px; background:#a1a1aa; border-radius:1px;"></div>
+            </div>
+          </div>
+          <span class="nav-label">Events</span>
+        </a>
+
+        <a href="#" class="nav-link">
+          <div style="width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+            <div style="position:relative; width:13px; height:13px;">
+              <div style="width:8px; height:8px; border-radius:50%; background:#a1a1aa; position:absolute; top:0; left:50%; transform:translateX(-50%);"></div>
+              <div style="width:13px; height:6px; border-radius:3px 3px 0 0; background:#a1a1aa; position:absolute; bottom:0; left:0;"></div>
+            </div>
+          </div>
+          <span class="nav-label">Users</span>
+        </a>
+
+        <a href="#" class="nav-link">
+          <div style="width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:2px; width:13px;">
+              <div style="width:13px; height:3px; background:#a1a1aa; border-radius:1px;"></div>
+              <div style="width:9px; height:3px; background:#a1a1aa; border-radius:1px;"></div>
+              <div style="width:5px; height:3px; background:#a1a1aa; border-radius:1px;"></div>
+            </div>
+          </div>
+          <span class="nav-label">Funnels</span>
+        </a>
+
+        <a href="#" class="nav-link">
+          <div style="width:20px; height:20px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+            <div style="display:flex; align-items:flex-end; gap:2px; height:13px;">
+              <div style="width:3px; height:7px; background:#a1a1aa; border-radius:1px 1px 0 0;"></div>
+              <div style="width:3px; height:11px; background:#a1a1aa; border-radius:1px 1px 0 0;"></div>
+              <div style="width:3px; height:9px; background:#a1a1aa; border-radius:1px 1px 0 0;"></div>
+            </div>
+          </div>
+          <span class="nav-label">Reports</span>
+        </a>
+
+      </nav>
+
+      <!-- Workspace footer -->
+      <div style="padding:12px 14px; border-top:1px solid #e4e4e7; display:flex; align-items:center; gap:9px; flex-shrink:0;">
+        <div style="width:24px; height:24px; background:#09090b; border-radius:5px; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+          <span style="color:#fff; font-size:11px; font-weight:700; font-family:'Geist',sans-serif; letter-spacing:-0.5px;">AC</span>
+        </div>
+        <div class="ws-info" style="transition:opacity 0.15s; overflow:hidden;">
+          <div style="font-size:12.5px; font-weight:600; color:#09090b; white-space:nowrap; line-height:1.3;">Acme Corp</div>
+          <div style="font-size:11px; color:#a1a1aa; white-space:nowrap;">Free plan</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN COLUMN ── -->
+    <div style="flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden;">
+
+      <!-- TOP BAR -->
+      <header style="height:52px; background:#fff; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; padding:0 24px; gap:16px; flex-shrink:0;">
+        <div style="flex:1; display:flex; align-items:center; gap:7px;">
+          <span style="font-size:12px; color:#a1a1aa; font-weight:500;">Pulse</span>
+          <span style="color:#d4d4d8; font-size:12px; line-height:1;">/</span>
+          <span style="font-size:13px; font-weight:600; color:#09090b;">Overview</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+          <!-- Date pill -->
+          <div class="date-pill">
+            <!-- Calendar icon -->
+            <div style="width:13px; height:12px; border:1.5px solid #9ca3af; border-radius:2px; position:relative; flex-shrink:0;">
+              <div style="position:absolute; top:-3px; left:2px; width:1.5px; height:4px; background:#9ca3af; border-radius:1px;"></div>
+              <div style="position:absolute; top:-3px; right:2px; width:1.5px; height:4px; background:#9ca3af; border-radius:1px;"></div>
+              <div style="position:absolute; top:3px; left:1px; right:1px; height:1px; background:#9ca3af;"></div>
+            </div>
+            Sep 1 – Sep 30, 2026
+            <!-- chevron -->
+            <div style="width:0; height:0; border-left:3.5px solid transparent; border-right:3.5px solid transparent; border-top:4px solid #9ca3af;"></div>
+          </div>
+
+          <button class="export-btn">Export</button>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+      <main style="flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:20px;">
+
+        <!-- ── METRIC CARDS ── -->
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+
+          <!-- MAU -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; padding:18px 20px;">
+            <div style="font-size:11px; font-weight:500; color:#71717a; text-transform:uppercase; letter-spacing:0.6px;">Monthly Active Users</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:400; line-height:1.1; margin-top:10px; color:#09090b; letter-spacing:-1.5px;">18,240</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+              <div style="display:flex; align-items:center; gap:5px;">
+                <div style="width:6px; height:6px; border-radius:50%; background:#16a34a; flex-shrink:0;"></div>
+                <span style="font-size:12px; color:#16a34a; font-weight:500; font-family:'Geist',sans-serif;">+12.4%</span>
+                <span style="font-size:12px; color:#a1a1aa;">vs last 30d</span>
+              </div>
+              <svg width="72" height="28" viewBox="0 0 72 28" fill="none" style="flex-shrink:0;">
+                <polyline points="0,26 12,22 24,17 36,14 48,10 60,6 72,2" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Retention -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; padding:18px 20px;">
+            <div style="font-size:11px; font-weight:500; color:#71717a; text-transform:uppercase; letter-spacing:0.6px;">30-Day Retention</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:400; line-height:1.1; margin-top:10px; color:#09090b; letter-spacing:-1.5px;">71.3%</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+              <div style="display:flex; align-items:center; gap:5px;">
+                <div style="width:6px; height:6px; border-radius:50%; background:#dc2626; flex-shrink:0;"></div>
+                <span style="font-size:12px; color:#dc2626; font-weight:500; font-family:'Geist',sans-serif;">-1.2%</span>
+                <span style="font-size:12px; color:#a1a1aa;">vs last 30d</span>
+              </div>
+              <svg width="72" height="28" viewBox="0 0 72 28" fill="none" style="flex-shrink:0;">
+                <polyline points="0,2 12,6 24,12 36,9 48,16 60,20 72,24" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Conversion -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; padding:18px 20px;">
+            <div style="font-size:11px; font-weight:500; color:#71717a; text-transform:uppercase; letter-spacing:0.6px;">Conversion Rate</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:400; line-height:1.1; margin-top:10px; color:#09090b; letter-spacing:-1.5px;">4.8%</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+              <div style="display:flex; align-items:center; gap:5px;">
+                <div style="width:6px; height:6px; border-radius:50%; background:#16a34a; flex-shrink:0;"></div>
+                <span style="font-size:12px; color:#16a34a; font-weight:500; font-family:'Geist',sans-serif;">+0.3pp</span>
+                <span style="font-size:12px; color:#a1a1aa;">vs last 30d</span>
+              </div>
+              <svg width="72" height="28" viewBox="0 0 72 28" fill="none" style="flex-shrink:0;">
+                <polyline points="0,26 12,22 24,15 36,18 48,11 60,6 72,2" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- MRR -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; padding:18px 20px;">
+            <div style="font-size:11px; font-weight:500; color:#71717a; text-transform:uppercase; letter-spacing:0.6px;">Monthly Recurring Revenue</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:400; line-height:1.1; margin-top:10px; color:#09090b; letter-spacing:-1.5px;">$34,700</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+              <div style="display:flex; align-items:center; gap:5px;">
+                <div style="width:6px; height:6px; border-radius:50%; background:#16a34a; flex-shrink:0;"></div>
+                <span style="font-size:12px; color:#16a34a; font-weight:500; font-family:'Geist',sans-serif;">+8.6%</span>
+                <span style="font-size:12px; color:#a1a1aa;">vs last 30d</span>
+              </div>
+              <svg width="72" height="28" viewBox="0 0 72 28" fill="none" style="flex-shrink:0;">
+                <polyline points="0,26 12,22 24,18 36,13 48,9 60,5 72,1" stroke="#16a34a" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── AREA CHART: Weekly Active Users ── -->
+        <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; padding:20px 24px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px;">
+            <div>
+              <div style="font-size:13px; font-weight:600; color:#09090b;">Weekly Active Users</div>
+              <div style="font-size:11.5px; color:#a1a1aa; margin-top:2px; font-family:'IBM Plex Mono',monospace;">Jan 6 – Feb 24, 2026 · 8 weeks</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; padding-top:2px;">
+              <div style="width:6px; height:6px; border-radius:50%; background:#2563eb;"></div>
+              <span style="font-size:12px; color:#52525b; font-weight:500;">WAU</span>
+            </div>
+          </div>
+
+          <!--
+            SVG area chart — all hand-coded.
+            y-axis: 10k–19k range, chart area y 20–170 (150px tall)
+            y(v) = 170 - ((v - 10000) / 9000) * 150
+
+            Data:
+              Jan  6 → 12,400 → y=130  x=60
+              Jan 13 → 13,100 → y=118  x=177
+              Jan 20 → 14,200 → y=100  x=294
+              Jan 27 → 13,800 → y=107  x=411
+              Feb  3 → 15,400 → y=80   x=528
+              Feb 10 → 16,100 → y=68   x=645
+              Feb 17 → 17,300 → y=48   x=762
+              Feb 24 → 18,240 → y=33   x=879
+
+            Grid y values:
+              10k → 170  (bottom axis)
+              12k → 137
+              14k → 103
+              16k → 70
+              18k → 37
+          -->
+          <svg viewBox="0 0 940 210" width="100%" height="210" style="display:block; overflow:visible;">
+            <defs>
+              <linearGradient id="wau-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Horizontal grid lines -->
+            <line x1="64" y1="37"  x2="900" y2="37"  stroke="#e4e4e7" stroke-width="1"/>
+            <line x1="64" y1="70"  x2="900" y2="70"  stroke="#e4e4e7" stroke-width="1"/>
+            <line x1="64" y1="103" x2="900" y2="103" stroke="#e4e4e7" stroke-width="1"/>
+            <line x1="64" y1="137" x2="900" y2="137" stroke="#e4e4e7" stroke-width="1"/>
+            <line x1="64" y1="170" x2="900" y2="170" stroke="#e4e4e7" stroke-width="1"/>
+
+            <!-- Y-axis labels -->
+            <text x="58" y="41"  text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">18k</text>
+            <text x="58" y="74"  text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">16k</text>
+            <text x="58" y="107" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">14k</text>
+            <text x="58" y="141" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">12k</text>
+            <text x="58" y="174" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">10k</text>
+
+            <!-- Area fill -->
+            <path d="M60,130 L177,118 L294,100 L411,107 L528,80 L645,68 L762,48 L879,33 L879,170 L60,170 Z" fill="url(#wau-fill)"/>
+
+            <!-- Area line -->
+            <polyline
+              points="60,130 177,118 294,100 411,107 528,80 645,68 762,48 879,33"
+              stroke="#2563eb"
+              stroke-width="2"
+              fill="none"
+              stroke-linejoin="round"
+              stroke-linecap="round"/>
+
+            <!-- Data point dots -->
+            <circle cx="60"  cy="130" r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="177" cy="118" r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="294" cy="100" r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="411" cy="107" r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="528" cy="80"  r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="645" cy="68"  r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="762" cy="48"  r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="879" cy="33"  r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>
+
+            <!-- Value labels on last point -->
+            <text x="879" y="24" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#2563eb" font-weight="500">18,240</text>
+
+            <!-- X-axis labels -->
+            <text x="60"  y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Jan 6</text>
+            <text x="177" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Jan 13</text>
+            <text x="294" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Jan 20</text>
+            <text x="411" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Jan 27</text>
+            <text x="528" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Feb 3</text>
+            <text x="645" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Feb 10</text>
+            <text x="762" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Feb 17</text>
+            <text x="879" y="192" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10.5" fill="#a1a1aa">Feb 24</text>
+          </svg>
+        </div>
+
+        <!-- ── BOTTOM 2-COL ── -->
+        <div style="display:grid; grid-template-columns:3fr 2fr; gap:16px; align-items:start;">
+
+          <!-- Events Table -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; overflow:hidden;">
+            <div style="padding:14px 20px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; justify-content:space-between;">
+              <div>
+                <div style="font-size:13px; font-weight:600; color:#09090b;">Top Events</div>
+                <div style="font-size:11.5px; color:#a1a1aa; margin-top:1px;">Last 30 days</div>
+              </div>
+              <a href="#" style="font-size:12px; color:#2563eb; font-weight:500; text-decoration:none;">View all</a>
+            </div>
+            <table style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="padding:9px 20px; text-align:left; font-weight:500; color:#71717a; font-size:11.5px; border-bottom:1px solid #e4e4e7; background:#fafafa;">Event</th>
+                  <th style="padding:9px 16px; text-align:right; font-weight:500; color:#71717a; font-size:11.5px; border-bottom:1px solid #e4e4e7; background:#fafafa; font-family:'IBM Plex Mono',monospace;">Count</th>
+                  <th style="padding:9px 16px; text-align:right; font-weight:500; color:#71717a; font-size:11.5px; border-bottom:1px solid #e4e4e7; background:#fafafa; font-family:'IBM Plex Mono',monospace;">Unique</th>
+                  <th style="padding:9px 20px 9px 16px; text-align:right; font-weight:500; color:#71717a; font-size:11.5px; border-bottom:1px solid #e4e4e7; background:#fafafa;">Δ 30d</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">page_view</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">284,120</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">18,240</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+14.2%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">session_start</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">52,870</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">14,310</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+9.1%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">button_click</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">38,450</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">11,820</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+6.7%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">form_submit</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">12,340</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">8,640</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+18.4%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">signup_complete</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">3,210</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">3,210</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+22.1%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">checkout_start</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">2,140</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">1,980</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#dc2626; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#dc2626; flex-shrink:0;"></span>-4.2%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; border-bottom:1px solid #f4f4f5;">plan_upgrade</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">876</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46; border-bottom:1px solid #f4f4f5;">721</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right; border-bottom:1px solid #f4f4f5;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+11.3%
+                    </span>
+                  </td>
+                </tr>
+                <tr class="table-row">
+                  <td style="padding:9px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">checkout_complete</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46;">1,263</td>
+                  <td style="padding:9px 16px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#3f3f46;">1,218</td>
+                  <td style="padding:9px 20px 9px 16px; text-align:right;">
+                    <span style="display:inline-flex; align-items:center; gap:4px; color:#16a34a; font-size:12px; font-weight:500;">
+                      <span style="width:5px; height:5px; border-radius:50%; background:#16a34a; flex-shrink:0;"></span>+8.6%
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Top Pages -->
+          <div style="background:#fff; border:1px solid #e4e4e7; border-radius:6px; overflow:hidden;">
+            <div style="padding:14px 20px; border-bottom:1px solid #e4e4e7; display:flex; align-items:center; justify-content:space-between;">
+              <div>
+                <div style="font-size:13px; font-weight:600; color:#09090b;">Top Pages</div>
+                <div style="font-size:11.5px; color:#a1a1aa; margin-top:1px;">Last 30 days</div>
+              </div>
+              <a href="#" style="font-size:12px; color:#2563eb; font-weight:500; text-decoration:none;">View all</a>
+            </div>
+
+            <!-- Page rows with relative traffic bars -->
+            <!-- max views = 94,320; percentages relative to that -->
+
+            <div class="page-row">
+              <div class="page-bar" style="width:100%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">/dashboard</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">4m 12s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b; font-weight:400;">94,320</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:44.4%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/features</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">2m 38s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">41,870</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:30.2%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/pricing</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">3m 54s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">28,440</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:20.4%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/docs/quickstart</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">6m 47s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">19,210</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:15.2%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">/blog/product-update</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">2m 15s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">14,380</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:9.5%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/settings/billing</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">1m 43s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">8,920</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row">
+              <div class="page-bar" style="width:8.1%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/integrations</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">3m 22s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">7,640</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+            <div class="page-row" style="border-bottom:none;">
+              <div class="page-bar" style="width:5.5%;"></div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#09090b;">/changelog</div>
+                <div style="font-size:11px; color:#a1a1aa; margin-top:1px; font-family:'IBM Plex Mono',monospace;">1m 58s avg</div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; margin-left:12px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#09090b;">5,210</div>
+                <div style="font-size:11px; color:#a1a1aa;">views</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Spacer -->
+        <div style="height:8px;"></div>
+
+      </main>
+    </div>
+  </div>
+</body>
+</html>

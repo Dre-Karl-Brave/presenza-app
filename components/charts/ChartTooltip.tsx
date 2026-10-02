@@ -14,12 +14,17 @@ export function ChartTooltip({
   if (!active || !point) return null;
 
   return (
-    <div className="chart-tooltip">
-      <p className="chart-tooltip__label">{point.label}</p>
-      <p>
-        {valueLabel}: {point.value === null ? "n/a" : `${point.value}%`}
+    <div className="bg-card border border-border rounded-[5px] px-3 py-2 shadow-sm text-[12px]">
+      <p className="font-semibold text-foreground font-mono">{point.label}</p>
+      <p className="text-foreground/80 mt-0.5">
+        {valueLabel}:{" "}
+        <span className="font-mono font-medium">
+          {point.value === null ? "n/a" : `${point.value}%`}
+        </span>
       </p>
-      {point.detail ? <p className="chart-tooltip__detail">{point.detail}</p> : null}
+      {point.detail ? (
+        <p className="text-muted-foreground text-[11px] mt-0.5 font-mono">{point.detail}</p>
+      ) : null}
     </div>
   );
 }

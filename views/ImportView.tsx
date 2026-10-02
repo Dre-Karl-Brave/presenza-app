@@ -2,45 +2,40 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { Upload, FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { DataTable, type Column } from "@/components/DataTable";
-import { PageHeader } from "@/components/PageHeader";
-import { ErrorState, LoadingState } from "@/components/StateView";
 import { StatCard } from "@/components/StatCard";
+import { LoadingState, ErrorState } from "@/components/StateView";
 import { formatNumber } from "@/lib/format";
 import { useImportCommit, useImportPreview } from "@/lib/import-client";
+import { cn } from "@/lib/utils";
 import type { ImportError } from "@/server/services/import";
 import { ClearAllCard } from "./ClearAllCard";
 import { ImportHistory } from "./ImportHistory";
 
-const errorColumns: Column<ImportError>[] = [
-  { key: "row", header: "Row", numeric: true, render: (error) => error.row },
-  { key: "column", header: "Column", render: (error) => error.column ?? "n/a" },
-  { key: "message", header: "Problem", render: (error) => error.message },
+const errorCols: Column<ImportError>[] = [
+  { key: "row", header: "Row", numeric: true, render: (e) => e.row },
+  { key: "col", header: "Column", render: (e) => e.column ?? "—" },
+  { key: "msg", header: "Problem", render: (e) => e.message },
 ];
 
-function TemplateCard() {
+function Section({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
   return (
-    <section className="card">
-      <h2 className="card__title">1. Get the template</h2>
-      <p className="card__description">
-        One row per student per class meeting. Required columns: student number, student name, subject code, section,
-        date, time in, time out, status. Optional: class start and class end (when the class meets).
-      </p>
-      <div className="card__body button-row">
-        <a className="button" href="/api/import/template?format=csv" download>
-          Download CSV template
-        </a>
-        <a className="button" href="/api/import/template?format=xlsx" download>
-          Download XLSX template
-        </a>
+    <div className="bg-card border border-border rounded-[6px] overflow-hidden">
+      <div className="px-[18px] py-[13px] border-b border-border">
+        <span className="text-[13px] font-semibold text-foreground">{title}</span>
+        {sub ? <span className="text-[12px] text-muted-foreground ml-2">{sub}</span> : null}
       </div>
-    </section>
+      <div className="p-[18px]">{children}</div>
+    </div>
   );
 }
 
 export function ImportView() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [dragging, setDragging] = useState(false);
   const preview = useImportPreview();
   const commit = useImportCommit();
 
@@ -56,142 +51,165 @@ export function ImportView() {
     choose(null);
   }
 
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragging(false);
+    const dropped = e.dataTransfer.files[0];
+    if (dropped) choose(dropped);
+  }
+
   const previewData = preview.data;
-  const sampleColumns: Column<Record<string, string>>[] = previewData
+  const sampleCols: Column<Record<string, string>>[] = previewData
     ? Object.keys(previewData.sample[0] ?? {}).map((key) => ({
-        key,
-        header: key,
-        render: (row) => row[key] ?? "",
+        key, header: key, render: (row) => row[key] ?? "",
       }))
     : [];
 
   return (
     <>
-      <PageHeader
-        title="Import"
-        description="Load attendance from a CSV or XLSX file. Uploading the same file again is safe: nothing is doubled."
-      />
-
-      <TemplateCard />
-
-      <section className="card">
-        <h2 className="card__title">2. Choose a file</h2>
-        <p className="card__description">.csv or .xlsx, up to 10 MB. You will see a preview before anything is saved.</p>
-        <div className="card__body">
-          <input
-            ref={inputRef}
-            className="input"
-            type="file"
-            accept=".csv,.xlsx"
-            onChange={(event) => choose(event.target.files?.[0] ?? null)}
-          />
+      {/* 1. Template */}
+      <Section title="1. Get the template" sub="one row per student per class meeting">
+        <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
+            <a href="/api/import/template?format=csv" download>Download CSV</a>
+          </Button>
+          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
+            <a href="/api/import/template?format=xlsx" download>Download XLSX</a>
+          </Button>
         </div>
-      </section>
+      </Section>
+
+      {/* 2. Upload */}
+      <Section title="2. Choose a file" sub=".csv or .xlsx, up to 10 MB">
+        <div
+          className={cn(
+            "flex flex-col items-center gap-3 rounded-[6px] border-2 border-dashed p-10 text-center cursor-pointer transition-colors duration-150",
+            dragging
+              ? "border-primary bg-accent/30 text-primary"
+              : "border-border text-muted-foreground hover:border-primary/50 hover:bg-secondary/40"
+          )}
+          onDragEnter={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragging(false); }}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current?.click()}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && inputRef.current?.click()}
+        >
+          <Upload className={cn("w-8 h-8 transition-colors", dragging ? "text-primary" : "opacity-30")} strokeWidth={1.5} />
+          <div>
+            <p className="text-[13px] font-semibold text-foreground">
+              {dragging ? "Drop it here" : "Drop a file or click to browse"}
+            </p>
+            <p className="text-[12px] mt-0.5">.csv or .xlsx — up to 10 MB</p>
+          </div>
+          {file ? (
+            <div className="flex items-center gap-2 text-[12px] font-medium text-foreground bg-secondary border border-border rounded-[5px] px-3 py-1">
+              <FileText className="w-3.5 h-3.5" />
+              {file.name}
+            </div>
+          ) : null}
+        </div>
+        <input ref={inputRef} type="file" accept=".csv,.xlsx" className="hidden"
+          onChange={(e) => choose(e.target.files?.[0] ?? null)} />
+      </Section>
 
       {preview.isPending ? (
-        <section className="card">
+        <div className="bg-card border border-border rounded-[6px] p-6">
           <LoadingState label="Reading and checking the file…" />
-        </section>
+        </div>
       ) : null}
 
       {preview.isError ? (
-        <section className="card">
+        <div className="bg-card border border-border rounded-[6px] p-6">
           <ErrorState message={preview.error.message} />
-        </section>
+        </div>
       ) : null}
 
       {previewData && !commit.data ? (
-        <section className="card">
-          <h2 className="card__title">3. Preview: {previewData.fileName}</h2>
-          <p className="card__description">Nothing has been saved yet.</p>
-
-          <div className="card__body stack">
-            <div className="grid grid--stats">
+        <Section title={`3. Preview: ${previewData.fileName}`} sub="nothing saved yet">
+          <div className="flex flex-col gap-[14px]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-[14px]">
               <StatCard label="Rows read" value={formatNumber(previewData.rowsRead)} />
               <StatCard label="Valid rows" value={formatNumber(previewData.validRows)} />
-              <StatCard label="Invalid rows" value={formatNumber(previewData.invalidRows)} hint="These are skipped" />
+              <StatCard label="Invalid rows" value={formatNumber(previewData.invalidRows)} hint="Skipped" />
               <StatCard label="New records" value={formatNumber(previewData.summary.logsCreated)} />
-              <StatCard label="Records updated" value={formatNumber(previewData.summary.logsUpdated)} />
-              <StatCard label="Already imported" value={formatNumber(previewData.summary.logsUnchanged)} />
+              <StatCard label="Updated" value={formatNumber(previewData.summary.logsUpdated)} />
+              <StatCard label="Unchanged" value={formatNumber(previewData.summary.logsUnchanged)} />
             </div>
 
-            <p className="muted">
+            <p className="text-[12.5px] text-muted-foreground">
               This would also create {formatNumber(previewData.summary.studentsCreated)} students,{" "}
               {formatNumber(previewData.summary.subjectsCreated)} subjects,{" "}
               {formatNumber(previewData.summary.sectionsCreated)} sections,{" "}
               {formatNumber(previewData.summary.classesCreated)} classes and{" "}
-              {formatNumber(previewData.summary.sessionsCreated)} class sessions
-              {previewData.summary.revived > 0 ? `, and bring back ${formatNumber(previewData.summary.revived)} removed rows` : ""}
-              .
-              {previewData.summary.schedulesInferred > 0
-                ? ` ${formatNumber(previewData.summary.schedulesInferred)} class schedules are guessed from the earliest time in, because the file has no class start/end.`
-                : ""}
+              {formatNumber(previewData.summary.sessionsCreated)} sessions
+              {previewData.summary.revived > 0 ? `, and bring back ${formatNumber(previewData.summary.revived)} removed rows` : ""}.
             </p>
 
             {previewData.errors.length > 0 ? (
-              <div>
-                <h3 className="card__title">Problems found</h3>
-                <p className="muted">
-                  {previewData.errorsTruncated ? "Showing the first 200. " : ""}Fix them in the file and choose it
-                  again, or import the valid rows and skip these.
+              <div className="space-y-2">
+                <p className="text-[13px] font-semibold">Problems found</p>
+                <p className="text-[12px] text-muted-foreground">
+                  {previewData.errorsTruncated ? "Showing the first 200. " : ""}
+                  Fix them and choose the file again, or import only the valid rows.
                 </p>
-                <DataTable
-                  columns={errorColumns}
-                  rows={previewData.errors}
-                  rowKey={(error) => `${error.row}-${error.column}-${error.message}`}
-                  status="ready"
-                />
+                <DataTable columns={errorCols} rows={previewData.errors}
+                  rowKey={(e) => `${e.row}-${e.column}-${e.message}`} status="ready" />
               </div>
             ) : null}
 
             {previewData.sample.length > 0 ? (
-              <div>
-                <h3 className="card__title">First rows</h3>
-                <DataTable
-                  columns={sampleColumns}
-                  rows={previewData.sample}
-                  rowKey={(row) => JSON.stringify(row)}
-                  status="ready"
-                />
+              <div className="space-y-2">
+                <p className="text-[13px] font-semibold">First rows</p>
+                <DataTable columns={sampleCols} rows={previewData.sample}
+                  rowKey={(row) => JSON.stringify(row)} status="ready" />
               </div>
             ) : null}
 
-            {commit.isError ? <div className="notice notice--danger">{commit.error.message}</div> : null}
+            {commit.isError ? (
+              <div className="text-[12.5px] text-destructive bg-destructive/8 rounded-[5px] px-4 py-2">
+                {commit.error.message}
+              </div>
+            ) : null}
 
-            <div className="button-row">
-              <button
-                type="button"
-                className="button button--primary"
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                size="sm"
+                className="h-7 text-[12.5px] rounded-[5px]"
                 disabled={previewData.validRows === 0 || commit.isPending || !file}
                 onClick={() => file && commit.mutate(file)}
               >
                 {commit.isPending ? "Importing…" : `Import ${formatNumber(previewData.validRows)} valid rows`}
-              </button>
-              <button type="button" className="button" onClick={reset} disabled={commit.isPending}>
+              </Button>
+              <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]"
+                onClick={reset} disabled={commit.isPending}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
-        </section>
+        </Section>
       ) : null}
 
       {commit.data ? (
-        <section className="card">
-          <div className="notice notice--success">
-            Imported {formatNumber(commit.data.validRows)} rows: {formatNumber(commit.data.summary.logsCreated)} new,{" "}
-            {formatNumber(commit.data.summary.logsUpdated)} updated, {formatNumber(commit.data.summary.logsUnchanged)}{" "}
-            already there.
-            {commit.data.invalidRows > 0 ? ` ${formatNumber(commit.data.invalidRows)} invalid rows were skipped.` : ""}
-          </div>
-          <div className="card__actions button-row">
-            <Link className="button button--primary" href="/">
-              View the dashboard
-            </Link>
-            <button type="button" className="button" onClick={reset}>
+        <div className="bg-card border border-border rounded-[6px] p-[18px] space-y-4">
+          <p className="text-[12.5px] text-[#16a34a] bg-[#16a34a]/8 rounded-[5px] px-4 py-2">
+            Imported {formatNumber(commit.data.validRows)} rows:{" "}
+            {formatNumber(commit.data.summary.logsCreated)} new,{" "}
+            {formatNumber(commit.data.summary.logsUpdated)} updated,{" "}
+            {formatNumber(commit.data.summary.logsUnchanged)} already there.
+            {commit.data.invalidRows > 0 ? ` ${formatNumber(commit.data.invalidRows)} invalid rows skipped.` : ""}
+          </p>
+          <div className="flex gap-2">
+            <Button size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
+              <Link href="/">View dashboard</Link>
+            </Button>
+            <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]" onClick={reset}>
               Import another file
-            </button>
+            </Button>
           </div>
-        </section>
+        </div>
       ) : null}
 
       <ImportHistory />

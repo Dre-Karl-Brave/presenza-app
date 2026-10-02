@@ -1,8 +1,7 @@
-export function PageHeader({ title, description }: { title: string; description?: string }) {
+/* Page-level description shown below the TopBar when needed */
+export function PageHeader({ description }: { description?: string }) {
+  if (!description) return null;
   return (
-    <header className="page-header">
-      <h1 className="page-header__title">{title}</h1>
-      {description ? <p className="page-header__description">{description}</p> : null}
-    </header>
+    <p className="text-[13px] text-muted-foreground -mt-2">{description}</p>
   );
 }

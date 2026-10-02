@@ -1,19 +1,15 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { NavBar } from "@/components/NavBar";
 import { LoadingState } from "@/components/StateView";
 import { Providers } from "@/lib/trpc";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -23,17 +19,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={manrope.variable}>
       <body>
         <Providers>
           <Suspense fallback={null}>
             <NavBar />
           </Suspense>
-          <main className="app-main">
+          <main className="flex-1 w-full max-w-[1100px] mx-auto px-4 py-6 flex flex-col gap-6">
             <Suspense fallback={<LoadingState />}>{children}</Suspense>
           </main>
-          <footer className="app-footer">
-            Presenza uses synthetic data only. No real student information is stored.
+          <footer className="py-4 text-center text-xs text-muted-foreground/50">
+            Synthetic data only — no real student information is stored.
           </footer>
         </Providers>
       </body>

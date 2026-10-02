@@ -2,38 +2,47 @@ import type { ViewStatus } from "@/lib/status";
 
 export function LoadingState({ label = "Loading…" }: { label?: string }) {
   return (
-    <div className="state" role="status" aria-live="polite">
-      <div className="spinner" aria-hidden="true" />
-      <p>{label}</p>
+    <div
+      className="flex items-center justify-center gap-3 min-h-[120px] text-muted-foreground"
+      role="status"
+      aria-live="polite"
+    >
+      <div
+        className="w-[18px] h-[18px] rounded-full border-2 border-border border-t-primary animate-spin shrink-0"
+        aria-hidden="true"
+      />
+      <span className="text-[13px]">{label}</span>
     </div>
   );
 }
 
 export function EmptyState({
-  title = "No data yet",
+  title = "No data",
   message = "There is nothing to show for the current filters.",
 }: {
   title?: string;
   message?: string;
 }) {
   return (
-    <div className="state">
-      <p className="state__title">{title}</p>
-      <p>{message}</p>
+    <div className="flex flex-col items-center justify-center gap-1 min-h-[120px] text-center text-muted-foreground px-6">
+      <p className="text-[13px] font-medium text-foreground">{title}</p>
+      <p className="text-[12px]">{message}</p>
     </div>
   );
 }
 
-export function ErrorState({ message = "Something went wrong while loading this data." }: { message?: string }) {
+export function ErrorState({ message }: { message?: string }) {
   return (
-    <div className="state state--error" role="alert">
-      <p className="state__title">Could not load data</p>
-      <p>{message}</p>
+    <div
+      className="flex flex-col items-center justify-center gap-1 min-h-[100px] text-center px-6 py-4 rounded-[6px] bg-destructive/8 text-destructive"
+      role="alert"
+    >
+      <p className="text-[13px] font-medium">Could not load data</p>
+      {message ? <p className="text-[12px] opacity-80">{message}</p> : null}
     </div>
   );
 }
 
-// Renders the placeholder for any status except "ready" (returns null then).
 export function StateView({
   status,
   emptyTitle,

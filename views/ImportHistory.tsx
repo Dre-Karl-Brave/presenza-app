@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { DataTable, type Column } from "@/components/DataTable";
 import { formatNumber } from "@/lib/format";
 import { useImportHistory, useUndoImport } from "@/lib/import-client";
@@ -15,56 +16,56 @@ export function ImportHistory() {
   const [confirmingId, setConfirmingId] = useState<number | null>(null);
 
   const columns: Column<Batch>[] = [
-    { key: "fileName", header: "File", render: (batch) => batch.fileName },
-    { key: "createdAt", header: "Imported", render: (batch) => new Date(batch.createdAt).toLocaleString() },
-    { key: "rowsRead", header: "Rows", numeric: true, render: (batch) => formatNumber(batch.rowsRead) },
-    { key: "rowsInvalid", header: "Skipped", numeric: true, render: (batch) => formatNumber(batch.rowsInvalid) },
-    { key: "logsCreated", header: "New", numeric: true, render: (batch) => formatNumber(batch.logsCreated) },
-    { key: "logsUpdated", header: "Updated", numeric: true, render: (batch) => formatNumber(batch.logsUpdated) },
-    { key: "logsUnchanged", header: "Unchanged", numeric: true, render: (batch) => formatNumber(batch.logsUnchanged) },
+    { key: "fileName", header: "File", render: (b) => b.fileName },
+    { key: "createdAt", header: "Imported", render: (b) => new Date(b.createdAt).toLocaleString() },
+    { key: "rowsRead", header: "Rows", numeric: true, render: (b) => formatNumber(b.rowsRead) },
+    { key: "rowsInvalid", header: "Skipped", numeric: true, render: (b) => formatNumber(b.rowsInvalid) },
+    { key: "logsCreated", header: "New", numeric: true, render: (b) => formatNumber(b.logsCreated) },
+    { key: "logsUpdated", header: "Updated", numeric: true, render: (b) => formatNumber(b.logsUpdated) },
+    { key: "logsUnchanged", header: "Unchanged", numeric: true, render: (b) => formatNumber(b.logsUnchanged) },
     {
-      key: "actions",
-      header: "",
+      key: "actions", header: "",
       render: (batch) =>
         confirmingId === batch.id ? (
-          <span className="button-row">
-            <button
-              type="button"
-              className="button button--danger"
+          <span className="flex items-center gap-1.5">
+            <Button variant="destructive" size="sm" className="h-6 text-[11px] rounded-[4px]"
               disabled={undo.isPending}
-              onClick={() => undo.mutate({ batchId: batch.id }, { onSettled: () => setConfirmingId(null) })}
-            >
-              Yes, remove its records
-            </button>
-            <button type="button" className="button" onClick={() => setConfirmingId(null)}>
+              onClick={() => undo.mutate({ batchId: batch.id }, { onSettled: () => setConfirmingId(null) })}>
+              Yes, remove
+            </Button>
+            <Button variant="outline" size="sm" className="h-6 text-[11px] rounded-[4px]"
+              onClick={() => setConfirmingId(null)}>
               Keep
-            </button>
+            </Button>
           </span>
         ) : (
-          <button type="button" className="button" onClick={() => setConfirmingId(batch.id)}>
+          <Button variant="ghost" size="sm" className="h-6 text-[11px] rounded-[4px]"
+            onClick={() => setConfirmingId(batch.id)}>
             Undo
-          </button>
+          </Button>
         ),
     },
   ];
 
   return (
-    <section className="card">
-      <h2 className="card__title">Import history</h2>
-      <p className="card__description">
-        Undo removes the attendance records an import added (and the students, sections and so on it created, if nothing
-        else uses them). Records changed by a later import stay with that later import.
-      </p>
-      {undo.isError ? <div className="notice notice--danger card__actions">{undo.error.message}</div> : null}
-      <div className="card__body">
-        <DataTable
-          columns={columns}
-          rows={history.data ?? []}
-          rowKey={(batch) => batch.id}
-          status={statusOf(history, (rows) => rows.length === 0)}
-          emptyMessage="No files have been imported yet."
-        />
+    <div className="bg-card border border-border rounded-[6px] overflow-hidden">
+      <div className="px-[18px] py-[13px] border-b border-border">
+        <span className="text-[13px] font-semibold text-foreground">Import history</span>
+        <span className="text-[12px] text-muted-foreground ml-2">undo removes the records an import created</span>
       </div>
-    </section>
+      {undo.isError ? (
+        <div className="mx-[18px] mt-3 text-[12px] text-destructive bg-destructive/8 rounded-[5px] px-3 py-2">
+          {undo.error.message}
+        </div>
+      ) : null}
+      <DataTable
+        columns={columns}
+        rows={history.data ?? []}
+        rowKey={(b) => b.id}
+        status={statusOf(history, (rows) => rows.length === 0)}
+        emptyMessage="No files have been imported yet."
+        compact
+      />
+    </div>
   );
 }

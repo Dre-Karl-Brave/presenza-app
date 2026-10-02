@@ -1,34 +1,51 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { filterValue, useFilters, type FilterKey } from "@/lib/filters";
 import { formatMonth, formatWeek } from "@/lib/format";
 import { useFilterOptions } from "@/lib/queries";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const ALL = "__all__";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-function Select({
+function FilterSelect({
   label,
   filterKey,
   children,
 }: {
   label: string;
   filterKey: FilterKey;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   const { filter, setFilter } = useFilters();
+  const current = filterValue(filter, filterKey);
+
   return (
-    <label className="field">
-      <span className="field__label">{label}</span>
-      <select
-        className="input"
-        value={filterValue(filter, filterKey)}
-        onChange={(event) => setFilter(filterKey, event.target.value)}
+    <div className="flex flex-col gap-1">
+      <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-[0.5px]">
+        {label}
+      </span>
+      <Select
+        value={current === "" ? ALL : current}
+        onValueChange={(val) => setFilter(filterKey, val === ALL ? "" : val)}
       >
-        <option value="">All</option>
-        {children}
-      </select>
-    </label>
+        <SelectTrigger size="sm" className="min-w-[120px] h-7 text-[12.5px] rounded-[5px]">
+          <SelectValue placeholder="All" />
+        </SelectTrigger>
+        <SelectContent position="popper">
+          <SelectItem value={ALL}>All</SelectItem>
+          {children}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 
@@ -37,53 +54,69 @@ export function FilterBar() {
   const { data: options } = useFilterOptions();
 
   return (
-    <div className="card">
-      <div className="filter-bar" role="group" aria-label="Filters">
-        <Select label="Day of week" filterKey="dayOfWeek">
-          {DAYS.map((name, index) => (
-            <option key={name} value={index + 1}>
-              {name}
-            </option>
-          ))}
-        </Select>
-        <Select label="Class hour" filterKey="hour">
-          {options?.hours.map((hour) => (
-            <option key={hour} value={hour}>
-              {String(hour).padStart(2, "0")}:00
-            </option>
-          ))}
-        </Select>
-        <Select label="Week" filterKey="week">
-          {options?.weeks.map((week) => (
-            <option key={week} value={week}>
-              {formatWeek(week)}
-            </option>
-          ))}
-        </Select>
-        <Select label="Month" filterKey="month">
-          {options?.months.map((month) => (
-            <option key={month} value={month}>
-              {formatMonth(month)}
-            </option>
-          ))}
-        </Select>
-        <Select label="Subject" filterKey="subjectId">
-          {options?.subjects.map((subject) => (
-            <option key={subject.id} value={subject.id}>
-              {subject.code} · {subject.title}
-            </option>
-          ))}
-        </Select>
-        <Select label="Section" filterKey="sectionId">
-          {options?.sections.map((section) => (
-            <option key={section.id} value={section.id}>
-              {section.name}
-            </option>
-          ))}
-        </Select>
-        <button type="button" className="button" onClick={reset} disabled={!hasFilters}>
-          Clear filters
-        </button>
+    <div
+      className="flex flex-wrap items-end gap-3 bg-card border border-border rounded-[6px] px-[18px] py-3"
+      role="group"
+      aria-label="Filters"
+    >
+      <FilterSelect label="Day" filterKey="dayOfWeek">
+        {DAYS.map((name, i) => (
+          <SelectItem key={name} value={String(i + 1)}>
+            {name}
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <FilterSelect label="Hour" filterKey="hour">
+        {options?.hours.map((hour) => (
+          <SelectItem key={hour} value={String(hour)}>
+            {String(hour).padStart(2, "0")}:00
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <FilterSelect label="Week" filterKey="week">
+        {options?.weeks.map((week) => (
+          <SelectItem key={week} value={week}>
+            {formatWeek(week)}
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <FilterSelect label="Month" filterKey="month">
+        {options?.months.map((month) => (
+          <SelectItem key={month} value={month}>
+            {formatMonth(month)}
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <FilterSelect label="Subject" filterKey="subjectId">
+        {options?.subjects.map((s) => (
+          <SelectItem key={s.id} value={String(s.id)}>
+            {s.code} · {s.title}
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <FilterSelect label="Section" filterKey="sectionId">
+        {options?.sections.map((s) => (
+          <SelectItem key={s.id} value={String(s.id)}>
+            {s.name}
+          </SelectItem>
+        ))}
+      </FilterSelect>
+
+      <div className="flex flex-col justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={reset}
+          disabled={!hasFilters}
+          className="h-7 text-[12.5px] rounded-[5px]"
+        >
+          Clear
+        </Button>
       </div>
     </div>
   );

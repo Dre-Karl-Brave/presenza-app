@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { formatNumber } from "@/lib/format";
 import { useClearAllData } from "@/lib/import-client";
 
@@ -15,38 +17,43 @@ export function ClearAllCard() {
     : 0;
 
   return (
-    <section className="card card--danger">
-      <h2 className="card__title">Clear all data</h2>
-      <p className="card__description">
-        Removes every record from Presenza: attendance, students, subjects, sections, schedules, terms and the import
-        history. Nothing is permanently erased from the database, but the system will look empty. Import a file to fill
-        it again.
-      </p>
-      <div className="card__body stack">
-        <label className="field">
-          <span className="field__label">Type {CONFIRM_WORD} to confirm</span>
-          <input
-            className="input"
+    <div className="bg-card border border-destructive/30 rounded-[6px] overflow-hidden">
+      <div className="px-[18px] py-[13px] border-b border-border">
+        <span className="text-[13px] font-semibold text-destructive">Clear all data</span>
+        <span className="text-[12px] text-muted-foreground ml-2">removes every record — nothing is permanently deleted</span>
+      </div>
+      <div className="p-[18px] flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-[0.5px]">
+            Type {CONFIRM_WORD} to confirm
+          </span>
+          <Input
             value={typed}
-            onChange={(event) => setTyped(event.target.value)}
+            onChange={(e) => setTyped(e.target.value)}
             autoComplete="off"
+            className="h-7 w-[160px] text-[12.5px] rounded-[5px]"
           />
-        </label>
-        <div className="button-row">
-          <button
-            type="button"
-            className="button button--danger"
+        </div>
+        <div>
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-7 text-[12.5px] rounded-[5px]"
             disabled={typed !== CONFIRM_WORD || clear.isPending}
             onClick={() => clear.mutate({ confirm: CONFIRM_WORD }, { onSuccess: () => setTyped("") })}
           >
             {clear.isPending ? "Clearing…" : "Clear all data"}
-          </button>
+          </Button>
         </div>
-        {clear.isError ? <div className="notice notice--danger">{clear.error.message}</div> : null}
+        {clear.isError ? (
+          <p className="text-[12px] text-destructive">{clear.error.message}</p>
+        ) : null}
         {clear.data ? (
-          <div className="notice notice--success">Cleared {formatNumber(removedTotal)} rows. The system is now empty.</div>
+          <p className="text-[12.5px] text-[#16a34a]">
+            Cleared {formatNumber(removedTotal)} rows. The system is now empty.
+          </p>
         ) : null}
       </div>
-    </section>
+    </div>
   );
 }

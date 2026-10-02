@@ -32,7 +32,7 @@ export const studentReportInputSchema = z
   sortBy: z.enum(["name", "studentNo", "attendanceRate", "absent"]).default("name"),
   sortDir: z.enum(["asc", "desc"]).default("asc"),
   page: z.number().int().min(1).default(1),
-  pageSize: z.number().int().min(1).max(100).default(25),
+  pageSize: z.number().int().min(1).max(10000).default(25),
 })
   .default({ filter: {}, sortBy: "name", sortDir: "asc", page: 1, pageSize: 25 });
 

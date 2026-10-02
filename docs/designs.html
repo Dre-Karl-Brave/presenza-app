@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presenza — Layout Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,700&family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', sans-serif; background: #f0f0f0; padding: 32px 24px 80px; color: #09090b; }
+    h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .sub { font-size: 13px; color: #71717a; margin: 4px 0 36px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(540px, 1fr)); gap: 20px; }
+    .card { border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.07); background: #fff; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.07); }
+    .frame { height: 340px; overflow: hidden; position: relative; }
+    .inner { width: 900px; height: 600px; transform-origin: top left; transform: scale(.578); position: absolute; top: 0; left: 0; pointer-events: none; }
+    .label { padding: 10px 14px 13px; border-top: 1px solid #e4e4e7; }
+    .label .n { font-size: 13px; font-weight: 600; }
+    .label .d { font-size: 11.5px; color: #71717a; margin-top: 1px; }
+  </style>
+</head>
+<body>
+<h1>Presenza — 10 Layout Options</h1>
+<p class="sub">Each design has a genuinely different structure — sidebar placement, content shape, nav style, and grid. Tell me a number to implement it.</p>
+<div class="grid">
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  1  PULSE — current: LEFT sidebar + header + 4-card + 2-col
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p1{display:flex;height:600px;overflow:hidden;background:#fafafa;font-family:'Geist',sans-serif;font-size:13px;color:#09090b;}
+.p1 .sb{width:232px;min-width:232px;background:#fff;border-right:1px solid #e4e4e7;display:flex;flex-direction:column;}
+.p1 .sbb{height:52px;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 14px;gap:9px;}
+.p1 .logo{position:relative;width:22px;height:22px;flex-shrink:0}
+.p1 .la{position:absolute;top:0;left:0;width:14px;height:14px;background:#2563eb;border-radius:3px}
+.p1 .lb{position:absolute;bottom:0;right:0;width:12px;height:12px;background:#09090b;border-radius:2px}
+.p1 .sbn{font-weight:700;font-size:15px;letter-spacing:-.5px}
+.p1 .tog{display:flex;align-items:center;gap:7px;height:32px;margin:5px 7px;padding:0 9px;border-radius:5px;border:1px solid #e4e4e7;background:#fff}
+.p1 .hbg{display:flex;flex-direction:column;gap:3px;width:14px}
+.p1 .hbg div{height:1.5px;background:#71717a;border-radius:1px}
+.p1 .hbg div:nth-child(2){width:10px}
+.p1 .slbl{padding:10px 10px 4px;font-size:10.5px;font-weight:600;color:#a1a1aa;letter-spacing:.6px;text-transform:uppercase}
+.p1 .nav{padding:0 7px;display:flex;flex-direction:column;gap:1px;flex:1}
+.p1 .ni{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:5px;font-size:13px;font-weight:500;color:#52525b;position:relative}
+.p1 .ni.act{background:#eff6ff;color:#1d4ed8}
+.p1 .ni.act::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:2.5px;background:#2563eb;border-radius:0 2px 2px 0}
+.p1 .ico{width:13px;height:13px;background:currentColor;border-radius:2px;opacity:.5;flex-shrink:0}
+.p1 .ico.act{background:#2563eb;opacity:1}
+.p1 .sbf{padding:11px 14px;border-top:1px solid #e4e4e7;display:flex;align-items:center;gap:9px}
+.p1 .ava{width:26px;height:26px;background:#09090b;border-radius:5px;display:flex;align-items:center;justify-content:center}
+.p1 .ava span{color:#fff;font-size:11px;font-weight:700}
+.p1 .mc{flex:1;display:flex;flex-direction:column;min-width:0}
+.p1 .hdr{height:52px;background:#fff;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 24px;gap:6px;flex-shrink:0}
+.p1 .bc{display:flex;align-items:center;gap:6px;font-size:12px}
+.p1 .bc .dm{color:#a1a1aa}
+.p1 .bc .sp{color:#d4d4d8}
+.p1 .bc .cr{font-weight:600;font-size:13px}
+.p1 .ct{flex:1;overflow:hidden;padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+.p1 .mg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.p1 .mc2{display:grid;grid-template-columns:1fr 260px;gap:12px;flex:1}
+.p1 .mcard{background:#fff;border:1px solid #e4e4e7;border-radius:6px;padding:14px 16px}
+.p1 .ml{font-size:10px;font-weight:500;color:#71717a;text-transform:uppercase;letter-spacing:.5px}
+.p1 .mv{font-family:'IBM Plex Mono',mono;font-size:28px;font-weight:400;margin-top:8px;color:#09090b;letter-spacing:-1px;line-height:1}
+.p1 .ms{font-size:11px;color:#71717a;margin-top:6px}
+.p1 .pnl{background:#fff;border:1px solid #e4e4e7;border-radius:6px;overflow:hidden}
+.p1 .ph{padding:10px 16px;border-bottom:1px solid #e4e4e7;font-size:13px;font-weight:600}
+.p1 .br{padding:8px 16px;border-bottom:1px solid #f4f4f5;display:flex;flex-direction:column;gap:4px}
+.p1 .brl{display:flex;justify-content:space-between;font-size:11.5px}
+.p1 .bt{height:3px;background:#f0f0f0;border-radius:2px;overflow:hidden}
+.p1 .bf{height:100%;border-radius:2px}
+</style>
+<div class="p1">
+  <div class="sb">
+    <div class="sbb"><div class="logo"><div class="la"></div><div class="lb"></div></div><span class="sbn">Presenza</span></div>
+    <div class="tog"><div class="hbg"><div></div><div></div><div></div></div><span style="font-size:12px;color:#71717a">Collapse</span></div>
+    <div class="slbl">Workspace</div>
+    <div class="nav">
+      <div class="ni act"><div class="ico act"></div>Dashboard</div>
+      <div class="ni"><div class="ico"></div>Trends</div>
+      <div class="ni"><div class="ico"></div>Comparisons</div>
+      <div class="ni"><div class="ico"></div>Reports</div>
+      <div class="ni"><div class="ico"></div>Import</div>
+    </div>
+    <div class="sbf"><div class="ava"><span>P</span></div><div><div style="font-size:12.5px;font-weight:600">Presenza</div><div style="font-size:11px;color:#a1a1aa">Synthetic data</div></div></div>
+  </div>
+  <div class="mc">
+    <div class="hdr"><div class="bc"><span class="dm">Presenza</span><span class="sp">/</span><span class="cr">Dashboard</span></div></div>
+    <div class="ct">
+      <div class="mg">
+        <div class="mcard"><div class="ml">Attendance Rate</div><div class="mv">87.3%</div><div class="ms">+2.1pp vs last month</div></div>
+        <div class="mcard"><div class="ml">Late Rate</div><div class="mv">8.2%</div><div class="ms">410 late arrivals</div></div>
+        <div class="mcard"><div class="ml">Absence Rate</div><div class="mv">4.5%</div><div class="ms">287 absences</div></div>
+        <div class="mcard"><div class="ml">At Risk</div><div class="mv" style="color:#dc2626">12</div><div class="ms">below 80%</div></div>
+      </div>
+      <div class="mc2">
+        <div class="pnl">
+          <div class="ph">Attendance breakdown</div>
+          <div class="br"><div class="brl"><span>Present</span><span style="color:#71717a">82%</span></div><div class="bt"><div class="bf" style="width:82%;background:#16a34a"></div></div></div>
+          <div class="br"><div class="brl"><span>Late</span><span style="color:#71717a">8%</span></div><div class="bt"><div class="bf" style="width:8%;background:#d97706"></div></div></div>
+          <div class="br"><div class="brl"><span>Absent</span><span style="color:#71717a">6%</span></div><div class="bt"><div class="bf" style="width:6%;background:#dc2626"></div></div></div>
+          <div class="br"><div class="brl"><span>Excused</span><span style="color:#71717a">4%</span></div><div class="bt"><div class="bf" style="width:4%;background:#71717a"></div></div></div>
+        </div>
+        <div class="pnl">
+          <div class="ph">Quick facts</div>
+          <div style="padding:14px 16px;display:flex;flex-direction:column;gap:14px">
+            <div><div class="ml">Students</div><div style="font-family:'IBM Plex Mono',mono;font-size:22px;margin-top:4px;letter-spacing:-.5px">248</div></div>
+            <div style="border-top:1px solid #e4e4e7;padding-top:14px"><div class="ml">Records</div><div style="font-family:'IBM Plex Mono',mono;font-size:22px;margin-top:4px;letter-spacing:-.5px">5,000</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">1 · Pulse — current baseline</div><div class="d">Left sidebar · header breadcrumb · 4-card grid · 2-col breakdown + facts</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  2  BENTO GRID — top nav, asymmetric card sizes, no sidebar
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p2{display:flex;flex-direction:column;height:600px;background:#f5f5f4;font-family:'Geist',sans-serif;font-size:13px;color:#1c1917}
+.p2 .tnav{height:48px;background:#1c1917;display:flex;align-items:center;padding:0 20px;gap:24px;flex-shrink:0}
+.p2 .tlogo{font-weight:800;font-size:15px;color:#fff;letter-spacing:-.5px;margin-right:8px}
+.p2 .tlink{font-size:13px;color:#78716c;font-weight:500;cursor:pointer}
+.p2 .tlink.act{color:#fff}
+.p2 .bento{flex:1;display:grid;grid-template-columns:2fr 1.4fr 1fr;grid-template-rows:1fr 1fr 1.2fr;gap:10px;padding:14px;overflow:hidden}
+.p2 .bc{background:#fff;border:1px solid #e7e5e4;border-radius:10px;overflow:hidden;min-width:0}
+.p2 .hero{grid-column:1;grid-row:1/3;display:flex;flex-direction:column;justify-content:center;padding:28px 32px}
+.p2 .chart{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;padding:18px}
+.p2 .s1{grid-column:3;grid-row:1;display:flex;flex-direction:column;justify-content:center;padding:16px}
+.p2 .s2{grid-column:3;grid-row:2;display:flex;flex-direction:column;justify-content:center;padding:16px;border-top:0}
+.p2 .tbl{grid-column:1/4;grid-row:3;display:flex;flex-direction:column;overflow:hidden}
+.p2 .bl{font-size:10px;font-weight:600;color:#78716c;text-transform:uppercase;letter-spacing:.6px}
+.p2 .bv{font-family:'IBM Plex Mono',mono;font-size:48px;font-weight:400;letter-spacing:-2px;line-height:1;margin-top:10px;color:#1c1917}
+.p2 .bsub{font-size:12px;color:#78716c;margin-top:10px;display:flex;align-items:center;gap:6px}
+.p2 .bdot{width:6px;height:6px;border-radius:50%;background:#16a34a;flex-shrink:0}
+.p2 .sv{font-family:'IBM Plex Mono',mono;font-size:28px;font-weight:400;letter-spacing:-1px;margin-top:6px;color:#1c1917}
+.p2 .tbhead{padding:8px 14px;border-bottom:1px solid #f5f5f4;display:flex;gap:0;font-size:10px;font-weight:600;color:#78716c;text-transform:uppercase;letter-spacing:.4px;background:#fafaf9}
+.p2 .tbrow{display:flex;padding:7px 14px;border-bottom:1px solid #f5f5f4;font-size:12px;align-items:center}
+.p2 .tbrow:hover{background:#fafaf9}
+.p2 .tc{flex:1}
+.p2 .tn{width:80px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#78716c}
+.p2 .tp{width:60px;text-align:right;font-size:12px;font-weight:500}
+.p2 .bars{flex:1;display:flex;flex-direction:column;gap:8px;padding:4px 0;justify-content:center}
+.p2 .brow{display:flex;align-items:center;gap:8px;font-size:11px}
+.p2 .bname{width:52px;color:#78716c}
+.p2 .btrack{flex:1;height:4px;background:#f5f5f4;border-radius:2px;overflow:hidden}
+.p2 .bfill{height:100%;border-radius:2px}
+.p2 .bpct{width:30px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:10px;color:#78716c}
+</style>
+<div class="p2">
+  <div class="tnav">
+    <span class="tlogo">Presenza</span>
+    <span class="tlink act">Dashboard</span>
+    <span class="tlink">Trends</span>
+    <span class="tlink">Comparisons</span>
+    <span class="tlink">Reports</span>
+    <span class="tlink">Import</span>
+    <div style="margin-left:auto;background:#292524;color:#e7e5e4;font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:5px;border:1px solid #44403c">Export</div>
+  </div>
+  <div class="bento">
+    <!-- hero: big attendance rate -->
+    <div class="bc hero">
+      <div class="bl">Overall attendance rate</div>
+      <div class="bv">87.3%</div>
+      <div class="bsub"><span class="bdot"></span><span>+2.1pp vs last month · 5,000 records</span></div>
+      <div style="display:flex;gap:20px;margin-top:24px;padding-top:20px;border-top:1px solid #f5f5f4">
+        <div><div class="bl">Late rate</div><div style="font-family:'IBM Plex Mono',mono;font-size:20px;margin-top:4px;letter-spacing:-.5px">8.2%</div></div>
+        <div><div class="bl">Absence rate</div><div style="font-family:'IBM Plex Mono',mono;font-size:20px;margin-top:4px;letter-spacing:-.5px;color:#dc2626">4.5%</div></div>
+        <div><div class="bl">At risk</div><div style="font-family:'IBM Plex Mono',mono;font-size:20px;margin-top:4px;letter-spacing:-.5px;color:#dc2626">12</div></div>
+      </div>
+    </div>
+    <!-- chart: breakdown bars -->
+    <div class="bc chart">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px">Breakdown</div>
+      <div class="bars">
+        <div class="brow"><span class="bname">Present</span><div class="btrack"><div class="bfill" style="width:82%;background:#16a34a"></div></div><span class="bpct">82%</span></div>
+        <div class="brow"><span class="bname">Late</span><div class="btrack"><div class="bfill" style="width:8%;background:#d97706"></div></div><span class="bpct">8%</span></div>
+        <div class="brow"><span class="bname">Absent</span><div class="btrack"><div class="bfill" style="width:6%;background:#dc2626"></div></div><span class="bpct">6%</span></div>
+        <div class="brow"><span class="bname">Excused</span><div class="btrack"><div class="bfill" style="width:4%;background:#a8a29e"></div></div><span class="bpct">4%</span></div>
+      </div>
+    </div>
+    <!-- s1: students -->
+    <div class="bc s1"><div class="bl">Students</div><div class="sv">248</div></div>
+    <!-- s2: worst day -->
+    <div class="bc s2" style="border-top:none"><div class="bl">Worst day</div><div style="font-size:20px;font-weight:600;margin-top:6px">Monday</div><div style="font-size:11px;color:#78716c;margin-top:2px">12.3% absence</div></div>
+    <!-- full-width table -->
+    <div class="bc tbl">
+      <div class="tbhead">
+        <div class="tc">Section</div>
+        <div class="tn">Present</div>
+        <div class="tn">Absent</div>
+        <div class="tp">Rate</div>
+      </div>
+      <div class="tbrow"><div class="tc">BSIT 3-A</div><div class="tn">1,240</div><div class="tn">86</div><div class="tp" style="color:#16a34a">93.5%</div></div>
+      <div class="tbrow"><div class="tc">BSIT 3-B</div><div class="tn">1,180</div><div class="tn">104</div><div class="tp" style="color:#d97706">91.9%</div></div>
+      <div class="tbrow"><div class="tc">BSIT 4-A</div><div class="tn">980</div><div class="tn">130</div><div class="tp" style="color:#dc2626">88.3%</div></div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">2 · Bento Grid — no sidebar, asymmetric card layout</div><div class="d">Top dark nav · Large hero card · Wide bottom table · Cards span different rows/cols</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  3  HERO FOCUS — left sidebar, 60/40 split, giant KPI left
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p3{display:flex;height:600px;background:#09090b;font-family:'Geist',sans-serif;font-size:13px;color:#e4e4e7}
+.p3 .sb{width:52px;min-width:52px;background:#111;border-right:1px solid #1f1f1f;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px}
+.p3 .sbi{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.p3 .sbi.act{background:#1f1f1f}
+.p3 .sbi:hover:not(.act){background:#1a1a1a}
+.p3 .brand3{width:32px;height:32px;background:#2563eb;border-radius:7px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.p3 .brand3 span{color:#fff;font-weight:800;font-size:14px}
+.p3 .mc{flex:1;display:flex;min-width:0}
+.p3 .left{width:55%;border-right:1px solid #1f1f1f;display:flex;flex-direction:column;justify-content:center;padding:40px 48px;gap:0}
+.p3 .right{flex:1;display:flex;flex-direction:column;padding:24px;gap:14px;justify-content:center}
+.p3 .lbl3{font-size:11px;font-weight:500;color:#52525b;text-transform:uppercase;letter-spacing:.6px}
+.p3 .big{font-family:'IBM Plex Mono',mono;font-size:88px;font-weight:400;line-height:1;letter-spacing:-3px;color:#fff;margin:12px 0 8px}
+.p3 .tag{display:inline-flex;align-items:center;gap:6px;background:#16a34a22;border:1px solid #16a34a44;color:#4ade80;font-size:12px;padding:4px 10px;border-radius:4px}
+.p3 .sub3{margin-top:24px;padding-top:24px;border-top:1px solid #1f1f1f;display:flex;gap:28px}
+.p3 .sb3{display:flex;flex-direction:column;gap:4px}
+.p3 .sb3l{font-size:10px;color:#52525b;text-transform:uppercase;letter-spacing:.5px}
+.p3 .sb3v{font-family:'IBM Plex Mono',mono;font-size:22px;letter-spacing:-.5px;color:#e4e4e7}
+.p3 .rcard{background:#111;border:1px solid #1f1f1f;border-radius:8px;padding:14px 16px}
+.p3 .rl{font-size:10px;color:#52525b;text-transform:uppercase;letter-spacing:.5px}
+.p3 .rv{font-family:'IBM Plex Mono',mono;font-size:26px;letter-spacing:-1px;color:#e4e4e7;margin-top:6px}
+.p3 .rsub{font-size:11px;color:#52525b;margin-top:4px}
+.p3 .rbar{margin-top:8px;height:3px;background:#1f1f1f;border-radius:2px;overflow:hidden}
+.p3 .rbf{height:100%;border-radius:2px}
+</style>
+<div class="p3">
+  <div class="sb">
+    <div class="brand3"><span>P</span></div>
+    <div class="sbi act">▣</div>
+    <div class="sbi">↗</div>
+    <div class="sbi">≡</div>
+    <div class="sbi">⊞</div>
+    <div class="sbi">↑</div>
+  </div>
+  <div class="mc">
+    <div class="left">
+      <div class="lbl3">Overall attendance rate</div>
+      <div class="big">87.3%</div>
+      <div class="tag"><span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block"></span> +2.1pp vs last month</div>
+      <div class="sub3">
+        <div class="sb3"><div class="sb3l">Late rate</div><div class="sb3v">8.2%</div></div>
+        <div class="sb3"><div class="sb3l">Absent</div><div class="sb3v" style="color:#f87171">4.5%</div></div>
+        <div class="sb3"><div class="sb3l">At risk</div><div class="sb3v" style="color:#f87171">12</div></div>
+      </div>
+    </div>
+    <div class="right">
+      <div style="font-size:12px;font-weight:600;color:#52525b;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Breakdown</div>
+      <div class="rcard"><div class="rl">Present</div><div class="rv">4,103</div><div class="rsub">82.0% of all records</div><div class="rbar"><div class="rbf" style="width:82%;background:#22c55e"></div></div></div>
+      <div class="rcard"><div class="rl">Late arrivals</div><div class="rv">410</div><div class="rsub">8.2% of counted</div><div class="rbar"><div class="rbf" style="width:8%;background:#f59e0b"></div></div></div>
+      <div class="rcard"><div class="rl">Absent</div><div class="rv" style="color:#f87171">287</div><div class="rsub">5.7% of counted</div><div class="rbar"><div class="rbf" style="width:6%;background:#ef4444"></div></div></div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">3 · Hero Focus — icon-only sidebar, giant KPI fills the left</div><div class="d">Collapsed icon nav · 55/45 split · 88px attendance rate dominates · Dark, data-forward</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  4  SPLIT PANE — fixed left col (stats+nav merged), right scrolls
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p4{display:flex;height:600px;background:#f8fafc;font-family:'DM Sans',sans-serif;font-size:13px;color:#0f172a}
+.p4 .left{width:320px;min-width:320px;background:#0f172a;display:flex;flex-direction:column;overflow:hidden}
+.p4 .lbrand{padding:20px 24px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.p4 .lbr{display:flex;align-items:center;gap:10px}
+.p4 .llogo{width:28px;height:28px;background:#38bdf8;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.p4 .llogo span{color:#fff;font-weight:800;font-size:14px}
+.p4 .lname{font-weight:700;font-size:15px;color:#f8fafc}
+.p4 .lstats{padding:20px 24px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.p4 .lslbl{font-size:9px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.8px}
+.p4 .lsv{font-family:'IBM Plex Mono',mono;font-size:34px;font-weight:400;color:#38bdf8;letter-spacing:-1.5px;line-height:1;margin-top:4px}
+.p4 .lssub{font-size:11px;color:#475569;margin-top:4px}
+.p4 .lsrow{display:flex;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+.p4 .lsm{display:flex;flex-direction:column;gap:3px}
+.p4 .lsml{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:.5px}
+.p4 .lsmv{font-family:'IBM Plex Mono',mono;font-size:17px;color:#94a3b8;letter-spacing:-.5px}
+.p4 .lnav{padding:12px 16px;display:flex;flex-direction:column;gap:1px;flex:1}
+.p4 .lni{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer}
+.p4 .lni.act{background:rgba(56,189,248,.1);color:#38bdf8}
+.p4 .lni:hover:not(.act){background:rgba(255,255,255,.04);color:#94a3b8}
+.p4 .lic{width:14px;height:14px;background:currentColor;border-radius:3px;opacity:.7;flex-shrink:0}
+.p4 .right{flex:1;display:flex;flex-direction:column;padding:24px;gap:14px;overflow:hidden}
+.p4 .rtitle{font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.4px}
+.p4 .rg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.p4 .rcard{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.p4 .rl{font-size:10px;font-weight:500;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
+.p4 .rv{font-size:22px;font-weight:700;color:#0f172a;margin-top:6px;letter-spacing:-.5px}
+.p4 .rs{font-size:11px;color:#94a3b8;margin-top:4px}
+.p4 .rtbl{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;flex:1;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.p4 .rth{padding:8px 14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;display:flex;font-size:10px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
+.p4 .rtr{display:flex;padding:8px 14px;border-bottom:1px solid #f1f5f9;font-size:12px}
+.p4 .rtc{flex:1}
+.p4 .rtn{width:70px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#64748b}
+.p4 .rtp{width:55px;text-align:right;font-size:12px;font-weight:600}
+</style>
+<div class="p4">
+  <div class="left">
+    <div class="lbrand">
+      <div class="lbr"><div class="llogo"><span>P</span></div><span class="lname">Presenza</span></div>
+    </div>
+    <div class="lstats">
+      <div><div class="lslbl">Attendance Rate</div><div class="lsv">87.3%</div><div class="lssub">+2.1pp vs last month</div></div>
+      <div class="lsrow">
+        <div class="lsm"><div class="lsml">Late</div><div class="lsmv">8.2%</div></div>
+        <div class="lsm"><div class="lsml">Absent</div><div class="lsmv" style="color:#f87171">4.5%</div></div>
+        <div class="lsm"><div class="lsml">At risk</div><div class="lsmv" style="color:#f87171">12</div></div>
+      </div>
+    </div>
+    <div class="lnav">
+      <div style="font-size:9px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.8px;padding:8px 10px 4px">Navigation</div>
+      <div class="lni act"><div class="lic" style="background:#38bdf8;opacity:1"></div>Dashboard</div>
+      <div class="lni"><div class="lic"></div>Trends</div>
+      <div class="lni"><div class="lic"></div>Comparisons</div>
+      <div class="lni"><div class="lic"></div>Reports</div>
+      <div class="lni"><div class="lic"></div>Import</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="rtitle">Section breakdown</div>
+    <div class="rg">
+      <div class="rcard"><div class="rl">Total students</div><div class="rv">248</div><div class="rs">across 6 sections</div></div>
+      <div class="rcard"><div class="rl">Total records</div><div class="rv">5,000</div><div class="rs">200 excused</div></div>
+    </div>
+    <div class="rtbl">
+      <div class="rth"><div class="rtc">Section</div><div class="rtn">Records</div><div class="rtp">Rate</div></div>
+      <div class="rtr"><div class="rtc">BSIT 3-A</div><div class="rtn">1,240</div><div class="rtp" style="color:#16a34a">93.5%</div></div>
+      <div class="rtr"><div class="rtc">BSIT 3-B</div><div class="rtn">1,180</div><div class="rtp" style="color:#16a34a">91.9%</div></div>
+      <div class="rtr"><div class="rtc">BSIT 4-A</div><div class="rtn">980</div><div class="rtp" style="color:#d97706">88.3%</div></div>
+      <div class="rtr"><div class="rtc">BSIT 4-B</div><div class="rtn">920</div><div class="rtp" style="color:#dc2626">82.1%</div></div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">4 · Split Pane — stats + nav merged in dark left, table right</div><div class="d">No top header · KPI in left pane with nav below · Right = scrollable data · DM Sans</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  5  BOTTOM NAV — no sidebar, content fills top, nav at bottom
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p5{display:flex;flex-direction:column;height:600px;background:#fff;font-family:'Geist',sans-serif;font-size:13px;color:#09090b}
+.p5 .topstrip{height:44px;background:#fff;border-bottom:1px solid #f4f4f5;display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0}
+.p5 .ts-logo{font-weight:800;font-size:15px;letter-spacing:-.5px}
+.p5 .ts-sub{font-size:11px;color:#a1a1aa;margin-left:auto}
+.p5 .content5{flex:1;overflow:hidden;padding:20px;display:flex;flex-direction:column;gap:14px}
+.p5 .hero5{background:#09090b;border-radius:12px;padding:24px 28px;display:flex;align-items:center;gap:32px}
+.p5 .h5main{display:flex;flex-direction:column;gap:4px}
+.p5 .h5l{font-size:11px;font-weight:500;color:#71717a;text-transform:uppercase;letter-spacing:.6px}
+.p5 .h5v{font-family:'IBM Plex Mono',mono;font-size:52px;font-weight:400;color:#fff;letter-spacing:-2px;line-height:1}
+.p5 .h5s{font-size:12px;color:#52525b;margin-top:4px;display:flex;align-items:center;gap:5px}
+.p5 .h5dot{width:5px;height:5px;border-radius:50%;background:#22c55e}
+.p5 .h5minis{display:flex;gap:20px;padding-left:32px;border-left:1px solid #1f1f1f;flex-wrap:wrap}
+.p5 .h5m{display:flex;flex-direction:column;gap:3px}
+.p5 .h5ml{font-size:9px;color:#52525b;text-transform:uppercase;letter-spacing:.6px}
+.p5 .h5mv{font-family:'IBM Plex Mono',mono;font-size:20px;color:#e4e4e7;letter-spacing:-.5px}
+.p5 .row5{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.p5 .c5{background:#fff;border:1px solid #f4f4f5;border-radius:10px;padding:14px 16px}
+.p5 .c5l{font-size:10px;font-weight:500;color:#a1a1aa;text-transform:uppercase;letter-spacing:.5px}
+.p5 .c5v{font-size:18px;font-weight:600;color:#09090b;margin-top:6px}
+.p5 .c5b{height:3px;background:#f4f4f5;border-radius:2px;overflow:hidden;margin-top:8px}
+.p5 .c5bf{height:100%;border-radius:2px}
+.p5 .bottomnav{height:56px;background:#fff;border-top:1px solid #f4f4f5;display:flex;align-items:stretch;flex-shrink:0}
+.p5 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border-right:1px solid #f4f4f5}
+.p5 .bn:last-child{border-right:none}
+.p5 .bn.act{color:#09090b}
+.p5 .bn:not(.act){color:#a1a1aa}
+.p5 .bn-dot{width:20px;height:3px;border-radius:2px}
+.p5 .bn.act .bn-dot{background:#09090b}
+.p5 .bn:not(.act) .bn-dot{background:#e4e4e7}
+.p5 .bn-lbl{font-size:10px;font-weight:500}
+</style>
+<div class="p5">
+  <div class="topstrip">
+    <span class="ts-logo">Presenza</span>
+    <span class="ts-sub">Autumn 2026 · Synthetic data</span>
+  </div>
+  <div class="content5">
+    <div class="hero5">
+      <div class="h5main">
+        <div class="h5l">Overall attendance rate</div>
+        <div class="h5v">87.3%</div>
+        <div class="h5s"><span class="h5dot"></span>+2.1pp vs last month</div>
+      </div>
+      <div class="h5minis">
+        <div class="h5m"><div class="h5ml">Late</div><div class="h5mv">8.2%</div></div>
+        <div class="h5m"><div class="h5ml">Absent</div><div class="h5mv" style="color:#f87171">4.5%</div></div>
+        <div class="h5m"><div class="h5ml">At risk</div><div class="h5mv" style="color:#f87171">12</div></div>
+        <div class="h5m"><div class="h5ml">Students</div><div class="h5mv">248</div></div>
+      </div>
+    </div>
+    <div class="row5">
+      <div class="c5"><div class="c5l">Present</div><div class="c5v">4,103</div><div class="c5b"><div class="c5bf" style="width:82%;background:#16a34a"></div></div></div>
+      <div class="c5"><div class="c5l">Late</div><div class="c5v">410</div><div class="c5b"><div class="c5bf" style="width:8%;background:#d97706"></div></div></div>
+      <div class="c5"><div class="c5l">Absent</div><div class="c5v" style="color:#dc2626">287</div><div class="c5b"><div class="c5bf" style="width:6%;background:#dc2626"></div></div></div>
+    </div>
+    <div class="row5">
+      <div class="c5"><div class="c5l">Total Records</div><div class="c5v">5,000</div></div>
+      <div class="c5"><div class="c5l">Worst day</div><div class="c5v">Monday</div></div>
+      <div class="c5"><div class="c5l">Excused</div><div class="c5v">200</div></div>
+    </div>
+  </div>
+  <div class="bottomnav">
+    <div class="bn act"><div class="bn-dot"></div><span class="bn-lbl">Dashboard</span></div>
+    <div class="bn"><div class="bn-dot"></div><span class="bn-lbl">Trends</span></div>
+    <div class="bn"><div class="bn-dot"></div><span class="bn-lbl">Compare</span></div>
+    <div class="bn"><div class="bn-dot"></div><span class="bn-lbl">Reports</span></div>
+    <div class="bn"><div class="bn-dot"></div><span class="bn-lbl">Import</span></div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">5 · Bottom Nav — mobile-app feel, full-bleed hero card</div><div class="d">No sidebar · Small top strip · Dark hero block · Nav tabs at the very bottom</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  6  RIGHT SIDEBAR — content left, sidebar right
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p6{display:flex;height:600px;background:#fafafa;font-family:'Geist',sans-serif;font-size:13px;color:#09090b}
+.p6 .mc{flex:1;display:flex;flex-direction:column;min-width:0}
+.p6 .hdr{height:52px;background:#fff;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 24px;flex-shrink:0}
+.p6 .htitle{font-size:18px;font-weight:700;letter-spacing:-.5px}
+.p6 .ct{flex:1;padding:20px 24px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.p6 .mg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.p6 .mcard{background:#fff;border:1px solid #e4e4e7;border-radius:6px;padding:14px 16px}
+.p6 .ml{font-size:10px;font-weight:500;color:#71717a;text-transform:uppercase;letter-spacing:.5px}
+.p6 .mv{font-family:'IBM Plex Mono',mono;font-size:28px;font-weight:400;margin-top:8px;color:#09090b;letter-spacing:-1px;line-height:1}
+.p6 .ms{font-size:11px;color:#71717a;margin-top:6px}
+.p6 .tbl{background:#fff;border:1px solid #e4e4e7;border-radius:6px;overflow:hidden;flex:1}
+.p6 .th{padding:8px 16px;border-bottom:1px solid #e4e4e7;background:#fafafa;display:flex;font-size:10px;font-weight:600;color:#71717a;text-transform:uppercase;letter-spacing:.4px}
+.p6 .tr{display:flex;padding:9px 16px;border-bottom:1px solid #f4f4f5;font-size:12.5px}
+.p6 .tr:hover{background:#fafafa}
+.p6 .tc{flex:1}
+.p6 .tn{width:80px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#71717a}
+.p6 .tp{width:60px;text-align:right;font-size:12px;font-weight:600}
+.p6 .sb{width:240px;min-width:240px;background:#fff;border-left:1px solid #e4e4e7;display:flex;flex-direction:column}
+.p6 .sbh{height:52px;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 16px;gap:8px}
+.p6 .sbl{display:flex;align-items:center;gap:8px}
+.p6 .sblogo{position:relative;width:20px;height:20px;flex-shrink:0}
+.p6 .sbla{position:absolute;top:0;left:0;width:13px;height:13px;background:#2563eb;border-radius:3px}
+.p6 .sblb{position:absolute;bottom:0;right:0;width:11px;height:11px;background:#09090b;border-radius:2px}
+.p6 .sbname{font-weight:700;font-size:14px;letter-spacing:-.5px}
+.p6 .nav6{padding:8px;display:flex;flex-direction:column;gap:1px}
+.p6 .ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:5px;font-size:13px;font-weight:500;color:#52525b;position:relative;cursor:pointer}
+.p6 .ni.act{background:#eff6ff;color:#1d4ed8}
+.p6 .ni.act::before{content:'';position:absolute;right:0;top:4px;bottom:4px;width:2.5px;background:#2563eb;border-radius:2px 0 0 2px}
+.p6 .ni:hover:not(.act){background:#f4f4f5;color:#18181b}
+.p6 .nic{width:13px;height:13px;background:currentColor;border-radius:2px;opacity:.5;flex-shrink:0}
+.p6 .nic.act{background:#2563eb;opacity:1}
+.p6 .sbstats{padding:14px 16px;border-top:1px solid #e4e4e7;display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.p6 .ssl{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:#a1a1aa}
+.p6 .ssv{font-family:'IBM Plex Mono',mono;font-size:20px;letter-spacing:-.5px;margin-top:3px;color:#09090b}
+</style>
+<div class="p6">
+  <div class="mc">
+    <div class="hdr"><span class="htitle">Dashboard</span></div>
+    <div class="ct">
+      <div class="mg">
+        <div class="mcard"><div class="ml">Attendance Rate</div><div class="mv">87.3%</div><div class="ms">+2.1pp vs last month</div></div>
+        <div class="mcard"><div class="ml">Late Rate</div><div class="mv">8.2%</div><div class="ms">410 late arrivals</div></div>
+        <div class="mcard"><div class="ml">Absence Rate</div><div class="mv" style="color:#dc2626">4.5%</div><div class="ms">287 absences</div></div>
+      </div>
+      <div class="tbl">
+        <div class="th"><div class="tc">Section</div><div class="tn">Records</div><div class="tn">Absent</div><div class="tp">Rate</div></div>
+        <div class="tr"><div class="tc">BSIT 3-A</div><div class="tn">1,240</div><div class="tn">86</div><div class="tp" style="color:#16a34a">93.5%</div></div>
+        <div class="tr"><div class="tc">BSIT 3-B</div><div class="tn">1,180</div><div class="tn">104</div><div class="tp" style="color:#16a34a">91.9%</div></div>
+        <div class="tr"><div class="tc">BSIT 4-A</div><div class="tn">980</div><div class="tn">130</div><div class="tp" style="color:#d97706">88.3%</div></div>
+        <div class="tr"><div class="tc">BSIT 4-B</div><div class="tn">920</div><div class="tn">160</div><div class="tp" style="color:#dc2626">82.1%</div></div>
+        <div class="tr"><div class="tc">BSCS 3-A</div><div class="tn">840</div><div class="tn">58</div><div class="tp" style="color:#16a34a">94.5%</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="sbh"><div class="sbl"><div class="sblogo"><div class="sbla"></div><div class="sblb"></div></div><span class="sbname">Presenza</span></div></div>
+    <div class="nav6">
+      <div style="padding:12px 10px 4px;font-size:10px;font-weight:600;color:#a1a1aa;text-transform:uppercase;letter-spacing:.6px">Workspace</div>
+      <div class="ni act"><div class="nic act"></div>Dashboard</div>
+      <div class="ni"><div class="nic"></div>Trends</div>
+      <div class="ni"><div class="nic"></div>Comparisons</div>
+      <div class="ni"><div class="nic"></div>Reports</div>
+      <div class="ni"><div class="nic"></div>Import</div>
+    </div>
+    <div class="sbstats">
+      <div style="border-top:1px solid #e4e4e7;padding-top:14px">
+        <div class="ssl">Students at risk</div><div class="ssv" style="color:#dc2626">12</div>
+      </div>
+      <div><div class="ssl">Total students</div><div class="ssv">248</div></div>
+      <div><div class="ssl">Total records</div><div class="ssv">5,000</div></div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">6 · Right Sidebar — content left, nav right, table dominates</div><div class="d">Active indicator on RIGHT edge · 3-card row · Full-width table · Stats at sidebar bottom</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  7  EDITORIAL — serif header, warm, top nav, magazine layout
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p7{display:flex;flex-direction:column;height:600px;background:#f5f0e8;font-family:'Geist',sans-serif;font-size:13px;color:#1c1610}
+.p7 .tnav{height:52px;background:#1c1610;display:flex;align-items:center;padding:0 24px;gap:0;flex-shrink:0}
+.p7 .tname{font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:#f5f0e8;letter-spacing:-.5px;margin-right:32px}
+.p7 .tlink{font-size:13px;color:#7a6f5e;padding:0 12px;height:100%;display:flex;align-items:center;font-weight:500;border-bottom:2px solid transparent;cursor:pointer}
+.p7 .tlink.act{color:#f5f0e8;border-bottom-color:#c25220}
+.p7 .ct{flex:1;padding:24px 28px;overflow:hidden;display:flex;flex-direction:column;gap:18px}
+.p7 .pagetitle{font-family:'Fraunces',serif;font-size:32px;font-weight:700;letter-spacing:-1px;color:#1c1610;line-height:1}
+.p7 .pagesub{font-size:13px;color:#7a7465;margin-top:4px}
+.p7 .mg7{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.p7 .mc7{background:#fff;border:1px solid #dcd7c6;border-radius:6px;padding:16px 18px;border-top:3px solid}
+.p7 .mc7.v1{border-top-color:#c25220}
+.p7 .mc7.v2{border-top-color:#a87820}
+.p7 .mc7.v3{border-top-color:#be3028}
+.p7 .mc7.v4{border-top-color:#1c1610}
+.p7 .ml7{font-size:10px;font-weight:600;color:#7a7465;text-transform:uppercase;letter-spacing:.6px}
+.p7 .mv7{font-family:'Fraunces',serif;font-size:34px;font-weight:700;margin-top:8px;color:#1c1610;letter-spacing:-1.5px;line-height:1}
+.p7 .ms7{font-size:11px;color:#7a7465;margin-top:6px}
+.p7 .mg7b{display:grid;grid-template-columns:1fr 260px;gap:12px;flex:1}
+.p7 .pnl7{background:#fff;border:1px solid #dcd7c6;border-radius:6px;overflow:hidden}
+.p7 .ph7{padding:12px 18px;border-bottom:1px solid #dcd7c6;display:flex;align-items:baseline;justify-content:space-between}
+.p7 .pt7{font-family:'Fraunces',serif;font-size:15px;font-weight:600}
+.p7 .br7{padding:9px 18px;border-bottom:1px solid #f0ece4;display:flex;flex-direction:column;gap:4px}
+.p7 .brl7{display:flex;justify-content:space-between;font-size:12px}
+.p7 .bt7{height:3px;background:#f0ece4;border-radius:2px;overflow:hidden}
+.p7 .bf7{height:100%;border-radius:2px}
+</style>
+<div class="p7">
+  <div class="tnav">
+    <span class="tname">Presenza</span>
+    <span class="tlink act">Dashboard</span>
+    <span class="tlink">Trends</span>
+    <span class="tlink">Comparisons</span>
+    <span class="tlink">Reports</span>
+    <span class="tlink">Import</span>
+  </div>
+  <div class="ct">
+    <div><div class="pagetitle">Dashboard</div><div class="pagesub">Attendance for the semester at a glance · Excused excluded from rates</div></div>
+    <div class="mg7">
+      <div class="mc7 v1"><div class="ml7">Attendance Rate</div><div class="mv7">87.3%</div><div class="ms7">+2.1pp vs last month</div></div>
+      <div class="mc7 v2"><div class="ml7">Late Rate</div><div class="mv7">8.2%</div><div class="ms7">410 arrivals</div></div>
+      <div class="mc7 v3"><div class="ml7">Absence Rate</div><div class="mv7">4.5%</div><div class="ms7">287 absent</div></div>
+      <div class="mc7 v4"><div class="ml7">At Risk</div><div class="mv7" style="color:#be3028">12</div><div class="ms7">below 80%</div></div>
+    </div>
+    <div class="mg7b">
+      <div class="pnl7">
+        <div class="ph7"><span class="pt7">Attendance breakdown</span><span style="font-size:11px;color:#7a7465">by status</span></div>
+        <div class="br7"><div class="brl7"><span>Present</span><span style="color:#7a7465">82% · 4,103</span></div><div class="bt7"><div class="bf7" style="width:82%;background:#1e7040"></div></div></div>
+        <div class="br7"><div class="brl7"><span>Late</span><span style="color:#7a7465">8% · 410</span></div><div class="bt7"><div class="bf7" style="width:8%;background:#a87820"></div></div></div>
+        <div class="br7"><div class="brl7"><span>Absent</span><span style="color:#7a7465">6% · 287</span></div><div class="bt7"><div class="bf7" style="width:6%;background:#be3028"></div></div></div>
+        <div class="br7"><div class="brl7"><span>Excused</span><span style="color:#7a7465">4% · 200</span></div><div class="bt7"><div class="bf7" style="width:4%;background:#7a7a8a"></div></div></div>
+      </div>
+      <div class="pnl7">
+        <div class="ph7"><span class="pt7">Quick facts</span></div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+          <div><div class="ml7">Total students</div><div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-top:4px;letter-spacing:-1px">248</div></div>
+          <div style="border-top:1px solid #e0d9cc;padding-top:14px"><div class="ml7">Total records</div><div style="font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-top:4px;letter-spacing:-1px">5,000</div></div>
+          <div style="border-top:1px solid #e0d9cc;padding-top:14px"><div class="ml7">Worst day</div><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-top:4px">Monday</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">7 · Editorial — Fraunces serif, warm cream, top dark nav</div><div class="d">No sidebar · Serif headings + numbers · Warm #f5f0e8 · Terracotta top-border accents</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  8  DENSE / TABLE-FIRST — sidebar, tiny stats, table dominates
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p8{display:flex;height:600px;background:#fafafa;font-family:'Geist',sans-serif;font-size:13px;color:#09090b}
+.p8 .sb{width:188px;min-width:188px;background:#fff;border-right:1px solid #e4e4e7;display:flex;flex-direction:column}
+.p8 .sbh{height:44px;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 12px;gap:8px}
+.p8 .sblo{position:relative;width:18px;height:18px;flex-shrink:0}
+.p8 .sbla{position:absolute;top:0;left:0;width:12px;height:12px;background:#2563eb;border-radius:2px}
+.p8 .sblb{position:absolute;bottom:0;right:0;width:10px;height:10px;background:#09090b;border-radius:2px}
+.p8 .sbname{font-weight:700;font-size:13px;letter-spacing:-.3px}
+.p8 .sbnav{padding:6px;display:flex;flex-direction:column;gap:0}
+.p8 .ni{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:4px;font-size:12.5px;font-weight:500;color:#52525b;cursor:pointer;position:relative}
+.p8 .ni.act{background:#eff6ff;color:#1d4ed8}
+.p8 .ni.act::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:2px;background:#2563eb;border-radius:0 1px 1px 0}
+.p8 .ni:hover:not(.act){background:#f4f4f5}
+.p8 .nic{width:11px;height:11px;background:currentColor;border-radius:2px;opacity:.5;flex-shrink:0}
+.p8 .nic.act{background:#2563eb;opacity:1}
+.p8 .sbstats{padding:10px 12px;border-top:1px solid #e4e4e7;margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.p8 .ssl{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#a1a1aa}
+.p8 .ssv{font-family:'IBM Plex Mono',mono;font-size:16px;letter-spacing:-.5px;margin-top:2px;color:#09090b}
+.p8 .mc{flex:1;display:flex;flex-direction:column;min-width:0}
+.p8 .hdr{height:44px;background:#fff;border-bottom:1px solid #e4e4e7;display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0}
+.p8 .hbc{display:flex;align-items:center;gap:5px;font-size:12px;flex:1}
+.p8 .hdim{color:#a1a1aa}
+.p8 .hsep{color:#d4d4d8}
+.p8 .hcur{font-weight:600;font-size:12.5px}
+.p8 .pills{display:flex;gap:6px;flex-shrink:0}
+.p8 .pill{background:#f4f4f5;border:1px solid #e4e4e7;border-radius:4px;font-size:10.5px;font-weight:500;color:#52525b;padding:3px 8px}
+.p8 .pill.hi{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+.p8 .statrow{display:flex;gap:0;border-bottom:1px solid #e4e4e7;flex-shrink:0}
+.p8 .sstat{flex:1;padding:8px 16px;border-right:1px solid #e4e4e7;display:flex;flex-direction:column;gap:2px}
+.p8 .sstat:last-child{border-right:none}
+.p8 .ssl2{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#a1a1aa}
+.p8 .ssv2{font-family:'IBM Plex Mono',mono;font-size:16px;letter-spacing:-.5px;color:#09090b;line-height:1.2}
+.p8 .tbl8{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.p8 .thead{background:#fafafa;border-bottom:1px solid #e4e4e7;display:flex;padding:6px 16px;font-size:10px;font-weight:600;color:#71717a;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.p8 .trow{display:flex;padding:7px 16px;border-bottom:1px solid #f4f4f5;font-size:12.5px;align-items:center}
+.p8 .trow:nth-child(even){background:#fff}
+.p8 .trow:nth-child(odd){background:#fafafa}
+.p8 .trow:hover{background:#f0f8ff}
+.p8 .tc1{flex:1;font-weight:500}
+.p8 .tc2{width:55px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#71717a}
+.p8 .tc3{width:55px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#71717a}
+.p8 .tc4{width:55px;text-align:right;font-size:12px;font-weight:600}
+</style>
+<div class="p8">
+  <div class="sb">
+    <div class="sbh"><div class="sblo"><div class="sbla"></div><div class="sblb"></div></div><span class="sbname">Presenza</span></div>
+    <div class="sbnav">
+      <div style="padding:8px 8px 4px;font-size:9.5px;font-weight:600;color:#a1a1aa;text-transform:uppercase;letter-spacing:.6px">Workspace</div>
+      <div class="ni act"><div class="nic act"></div>Dashboard</div>
+      <div class="ni"><div class="nic"></div>Trends</div>
+      <div class="ni"><div class="nic"></div>Comparisons</div>
+      <div class="ni"><div class="nic"></div>Reports</div>
+      <div class="ni"><div class="nic"></div>Import</div>
+    </div>
+    <div class="sbstats">
+      <div><div class="ssl">At risk</div><div class="ssv" style="color:#dc2626">12</div></div>
+      <div><div class="ssl">Students</div><div class="ssv">248</div></div>
+      <div><div class="ssl">Records</div><div class="ssv">5,000</div></div>
+    </div>
+  </div>
+  <div class="mc">
+    <div class="hdr">
+      <div class="hbc"><span class="hdim">Presenza</span><span class="hsep">/</span><span class="hcur">Dashboard</span></div>
+      <div class="pills">
+        <div class="pill">Day ▾</div>
+        <div class="pill hi">Month ▾</div>
+        <div class="pill">Subject ▾</div>
+        <div class="pill">Section ▾</div>
+      </div>
+    </div>
+    <div class="statrow">
+      <div class="sstat"><div class="ssl2">Attendance</div><div class="ssv2" style="color:#16a34a">87.3%</div></div>
+      <div class="sstat"><div class="ssl2">Late rate</div><div class="ssv2">8.2%</div></div>
+      <div class="sstat"><div class="ssl2">Absent</div><div class="ssv2" style="color:#dc2626">4.5%</div></div>
+      <div class="sstat"><div class="ssl2">Present</div><div class="ssv2">4,103</div></div>
+      <div class="sstat"><div class="ssl2">Excused</div><div class="ssv2">200</div></div>
+    </div>
+    <div class="tbl8">
+      <div class="thead">
+        <div class="tc1">Student</div>
+        <div class="tc2">Present</div>
+        <div class="tc3">Absent</div>
+        <div class="tc4">Rate</div>
+      </div>
+      <div class="trow"><div class="tc1">Santos, Maria R.</div><div class="tc2">42</div><div class="tc3">3</div><div class="tc4" style="color:#16a34a">93.3%</div></div>
+      <div class="trow"><div class="tc1">Reyes, Juan D.</div><div class="tc2">40</div><div class="tc3">5</div><div class="tc4" style="color:#16a34a">88.9%</div></div>
+      <div class="trow"><div class="tc1">Cruz, Ana P.</div><div class="tc2">38</div><div class="tc3">7</div><div class="tc4" style="color:#d97706">84.4%</div></div>
+      <div class="trow"><div class="tc1">Garcia, Luis M.</div><div class="tc2">35</div><div class="tc3">10</div><div class="tc4" style="color:#dc2626">77.8%</div></div>
+      <div class="trow"><div class="tc1">Dela Cruz, Sarah</div><div class="tc2">44</div><div class="tc3">1</div><div class="tc4" style="color:#16a34a">97.8%</div></div>
+      <div class="trow"><div class="tc1">Mendoza, Carlo J.</div><div class="tc2">36</div><div class="tc3">9</div><div class="tc4" style="color:#dc2626">80.0%</div></div>
+      <div class="trow"><div class="tc1">Ramos, Liza T.</div><div class="tc2">41</div><div class="tc3">4</div><div class="tc4" style="color:#16a34a">91.1%</div></div>
+      <div class="trow"><div class="tc1">Torres, Miguel F.</div><div class="tc2">33</div><div class="tc3">12</div><div class="tc4" style="color:#dc2626">73.3%</div></div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">8 · Dense / Table-first — student rows dominate, stats are tiny</div><div class="d">Compact sidebar · 1-line stat strip instead of cards · Full table · Filter pills in header</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  9  DARK MINIMAL — top nav pill, no sidebar, full-width cards
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p9{display:flex;flex-direction:column;height:600px;background:#09090b;font-family:'Geist',sans-serif;font-size:13px;color:#e4e4e7}
+.p9 .tnav{height:52px;display:flex;align-items:center;padding:0 24px;flex-shrink:0;border-bottom:1px solid #1f1f1f}
+.p9 .tlogo{font-weight:700;font-size:15px;color:#fff;margin-right:20px;letter-spacing:-.5px}
+.p9 .tpills{display:flex;gap:2px;background:#111;border:1px solid #1f1f1f;border-radius:8px;padding:3px}
+.p9 .tp{padding:5px 14px;border-radius:5px;font-size:12.5px;font-weight:500;cursor:pointer;color:#71717a}
+.p9 .tp.act{background:#1f1f1f;color:#e4e4e7}
+.p9 .tp:hover:not(.act){color:#a1a1aa}
+.p9 .ct{flex:1;padding:24px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.p9 .ptitle{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.5px}
+.p9 .prow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1f1f1f;border:1px solid #1f1f1f;border-radius:8px;overflow:hidden}
+.p9 .pc{background:#111;padding:18px 20px;display:flex;flex-direction:column;gap:0}
+.p9 .pl{font-size:10px;font-weight:500;color:#52525b;text-transform:uppercase;letter-spacing:.5px}
+.p9 .pv{font-family:'IBM Plex Mono',mono;font-size:30px;font-weight:400;letter-spacing:-1px;line-height:1;margin-top:8px;color:#e4e4e7}
+.p9 .ps{font-size:11px;color:#52525b;margin-top:6px;display:flex;align-items:center;gap:4px}
+.p9 .pdot{width:4px;height:4px;border-radius:50%}
+.p9 .full{background:#111;border:1px solid #1f1f1f;border-radius:8px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.p9 .fh{padding:12px 20px;border-bottom:1px solid #1f1f1f;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#e4e4e7}
+.p9 .fh span{font-size:11px;color:#52525b;font-weight:400}
+.p9 .fbars{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.p9 .fb{display:flex;align-items:center;gap:12px;font-size:12px}
+.p9 .fblabel{width:60px;color:#52525b}
+.p9 .fbtrack{flex:1;height:4px;background:#1f1f1f;border-radius:2px;overflow:hidden}
+.p9 .fbfill{height:100%;border-radius:2px}
+.p9 .fbpct{width:36px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#a1a1aa}
+.p9 .fbcount{width:50px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11px;color:#52525b}
+</style>
+<div class="p9">
+  <div class="tnav">
+    <span class="tlogo">Presenza</span>
+    <div class="tpills">
+      <div class="tp act">Dashboard</div>
+      <div class="tp">Trends</div>
+      <div class="tp">Comparisons</div>
+      <div class="tp">Reports</div>
+      <div class="tp">Import</div>
+    </div>
+  </div>
+  <div class="ct">
+    <div class="ptitle">Dashboard</div>
+    <div class="prow">
+      <div class="pc"><div class="pl">Attendance rate</div><div class="pv" style="color:#22c55e">87.3%</div><div class="ps"><span class="pdot" style="background:#22c55e"></span>+2.1pp vs last</div></div>
+      <div class="pc"><div class="pl">Late rate</div><div class="pv">8.2%</div><div class="ps">410 late</div></div>
+      <div class="pc"><div class="pl">Absence rate</div><div class="pv" style="color:#f87171">4.5%</div><div class="ps"><span class="pdot" style="background:#ef4444"></span>287 absent</div></div>
+      <div class="pc"><div class="pl">At risk</div><div class="pv" style="color:#f87171">12</div><div class="ps">below 80%</div></div>
+    </div>
+    <div class="full">
+      <div class="fh">Attendance breakdown <span>all records · excused included</span></div>
+      <div class="fbars">
+        <div class="fb"><span class="fblabel">Present</span><div class="fbtrack"><div class="fbfill" style="width:82%;background:#22c55e"></div></div><span class="fbpct">82%</span><span class="fbcount">4,103</span></div>
+        <div class="fb"><span class="fblabel">Late</span><div class="fbtrack"><div class="fbfill" style="width:8%;background:#f59e0b"></div></div><span class="fbpct">8%</span><span class="fbcount">410</span></div>
+        <div class="fb"><span class="fblabel">Absent</span><div class="fbtrack"><div class="fbfill" style="width:6%;background:#ef4444"></div></div><span class="fbpct">6%</span><span class="fbcount">287</span></div>
+        <div class="fb"><span class="fblabel">Excused</span><div class="fbtrack"><div class="fbfill" style="width:4%;background:#52525b"></div></div><span class="fbpct">4%</span><span class="fbcount">200</span></div>
+      </div>
+      <div style="display:flex;gap:0;margin-top:auto;border-top:1px solid #1f1f1f">
+        <div style="flex:1;padding:12px 20px;border-right:1px solid #1f1f1f"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#52525b">Students</div><div style="font-family:'IBM Plex Mono',mono;font-size:20px;color:#e4e4e7;margin-top:4px">248</div></div>
+        <div style="flex:1;padding:12px 20px;border-right:1px solid #1f1f1f"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#52525b">Records</div><div style="font-family:'IBM Plex Mono',mono;font-size:20px;color:#e4e4e7;margin-top:4px">5,000</div></div>
+        <div style="flex:1;padding:12px 20px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#52525b">Worst day</div><div style="font-size:18px;font-weight:600;color:#e4e4e7;margin-top:4px">Monday</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">9 · Dark Minimal — pill nav, no sidebar, full-width cards</div><div class="d">Pill tab switcher · All dark · Metric row as one connected band · Breakdown + footer strip</div></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+  10  SYNE BOLD — sidebar left, big typography, black borders
+═══════════════════════════════════════════════════════════ -->
+<div class="card">
+<div class="frame"><div class="inner">
+<style>
+.p10{display:flex;height:600px;background:#f5f5f5;font-family:'Syne',system-ui,sans-serif;font-size:13px;color:#09090b}
+.p10 .sb{width:200px;min-width:200px;background:#fff;border-right:2px solid #09090b;display:flex;flex-direction:column}
+.p10 .sbh{height:56px;border-bottom:2px solid #09090b;display:flex;align-items:center;padding:0 16px;gap:10px}
+.p10 .sblogo{width:26px;height:26px;background:#09090b;display:flex;align-items:center;justify-content:center}
+.p10 .sblogo span{color:#fff;font-weight:800;font-size:14px}
+.p10 .sbname{font-weight:800;font-size:14px;letter-spacing:-.3px;text-transform:uppercase}
+.p10 .sbnav{padding:12px 0;flex:1;display:flex;flex-direction:column;gap:0}
+.p10 .ni{display:flex;align-items:center;gap:0;padding:9px 16px;font-size:12.5px;font-weight:700;color:#a3a3a3;text-transform:uppercase;letter-spacing:.3px;cursor:pointer;border-left:3px solid transparent}
+.p10 .ni.act{color:#09090b;border-left-color:#09090b}
+.p10 .ni:hover:not(.act){color:#525252;background:#f5f5f5}
+.p10 .sbf{padding:14px 16px;border-top:2px solid #09090b}
+.p10 .mc{flex:1;display:flex;flex-direction:column;min-width:0}
+.p10 .hdr{height:56px;background:#fff;border-bottom:2px solid #09090b;display:flex;align-items:center;padding:0 20px;flex-shrink:0}
+.p10 .htitle{font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;flex:1}
+.p10 .ct{flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.p10 .mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.p10 .mcard{background:#fff;border:2px solid #09090b;padding:14px 14px}
+.p10 .ml{font-size:9px;font-weight:700;color:#a3a3a3;text-transform:uppercase;letter-spacing:.8px}
+.p10 .mv{font-size:30px;font-weight:800;margin-top:6px;color:#09090b;letter-spacing:-1px;line-height:1}
+.p10 .ms{font-size:10px;color:#a3a3a3;margin-top:6px;text-transform:uppercase;letter-spacing:.3px}
+.p10 .bot{display:grid;grid-template-columns:1fr 200px;gap:8px;flex:1}
+.p10 .tbl{background:#fff;border:2px solid #09090b;overflow:hidden;display:flex;flex-direction:column}
+.p10 .th{padding:7px 14px;border-bottom:2px solid #09090b;display:flex;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#a3a3a3;background:#f5f5f5}
+.p10 .tr{display:flex;padding:8px 14px;border-bottom:1px solid #e5e5e5;font-size:12px;font-weight:500}
+.p10 .tr:hover{background:#f5f5f5}
+.p10 .tc{flex:1}
+.p10 .tn{width:60px;text-align:right;font-family:'IBM Plex Mono',mono;font-size:11.5px;color:#a3a3a3}
+.p10 .tp{width:55px;text-align:right;font-size:12px;font-weight:700}
+.p10 .facts{background:#09090b;display:flex;flex-direction:column;justify-content:center;padding:20px}
+.p10 .fl{font-size:9px;font-weight:700;color:#525252;text-transform:uppercase;letter-spacing:.8px}
+.p10 .fv{font-size:28px;font-weight:800;color:#fff;margin-top:4px;letter-spacing:-1px}
+.p10 .fdiv{height:1px;background:#1a1a1a;margin:14px 0}
+</style>
+<div class="p10">
+  <div class="sb">
+    <div class="sbh"><div class="sblogo"><span>P</span></div><span class="sbname">Presenza</span></div>
+    <div class="sbnav">
+      <div class="ni act">Dashboard</div>
+      <div class="ni">Trends</div>
+      <div class="ni">Comparisons</div>
+      <div class="ni">Reports</div>
+      <div class="ni">Import</div>
+    </div>
+    <div class="sbf" style="font-size:9px;font-weight:700;color:#a3a3a3;text-transform:uppercase;letter-spacing:.5px">Synthetic data only</div>
+  </div>
+  <div class="mc">
+    <div class="hdr"><span class="htitle">Dashboard</span><span style="font-size:9px;font-weight:700;color:#a3a3a3;text-transform:uppercase;letter-spacing:.5px">AY 2025–26 · Sem 1</span></div>
+    <div class="ct">
+      <div class="mg">
+        <div class="mcard"><div class="ml">Attendance</div><div class="mv" style="color:#16a34a">87.3%</div><div class="ms">+2.1pp</div></div>
+        <div class="mcard"><div class="ml">Late rate</div><div class="mv">8.2%</div><div class="ms">410 arrivals</div></div>
+        <div class="mcard"><div class="ml">Absence</div><div class="mv" style="color:#dc2626">4.5%</div><div class="ms">287 absent</div></div>
+        <div class="mcard"><div class="ml">At risk</div><div class="mv" style="color:#dc2626">12</div><div class="ms">below 80%</div></div>
+      </div>
+      <div class="bot">
+        <div class="tbl">
+          <div class="th"><div class="tc">Section</div><div class="tn">Records</div><div class="tp">Rate</div></div>
+          <div class="tr"><div class="tc">BSIT 3-A</div><div class="tn">1,240</div><div class="tp" style="color:#16a34a">93.5%</div></div>
+          <div class="tr"><div class="tc">BSIT 3-B</div><div class="tn">1,180</div><div class="tp" style="color:#16a34a">91.9%</div></div>
+          <div class="tr"><div class="tc">BSIT 4-A</div><div class="tn">980</div><div class="tp" style="color:#d97706">88.3%</div></div>
+          <div class="tr"><div class="tc">BSIT 4-B</div><div class="tn">920</div><div class="tp" style="color:#dc2626">82.1%</div></div>
+          <div class="tr"><div class="tc">BSCS 3-A</div><div class="tn">840</div><div class="tp" style="color:#16a34a">94.5%</div></div>
+        </div>
+        <div class="facts">
+          <div><div class="fl">Students</div><div class="fv">248</div></div>
+          <div class="fdiv"></div>
+          <div><div class="fl">Records</div><div class="fv">5,000</div></div>
+          <div class="fdiv"></div>
+          <div><div class="fl">Worst day</div><div style="font-size:20px;font-weight:800;color:#fff;margin-top:4px">Mon</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="label"><div class="n">10 · Syne Bold — heavy type, 2px black borders, inverted facts</div><div class="d">Syne 800 · Thick borders instead of shadows · Left-border nav indicator · Black facts panel</div></div>
+</div>
+
+
+</div><!-- end grid -->
+
+<div style="margin-top:40px;padding:18px 20px;background:#fff;border:1px solid #e4e4e7;border-radius:8px;max-width:620px">
+  <div style="font-size:13px;font-weight:600;margin-bottom:4px">How to choose</div>
+  <div style="font-size:13px;color:#71717a;line-height:1.6">Say a number 1–10 and I'll rebuild the full app. You can also mix: <em>"5 but with 7's serif headings"</em> or <em>"9 but light mode."</em></div>
+</div>
+</body>
+</html>

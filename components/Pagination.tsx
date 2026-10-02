@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 export function Pagination({
   page,
   pageSize,
@@ -14,22 +16,29 @@ export function Pagination({
   const last = Math.min(page * pageSize, total);
 
   return (
-    <div className="pager">
-      <span>
+    <div className="flex items-center justify-between gap-3 mt-3 text-[12px] text-muted-foreground px-[18px] py-2 border-t border-border">
+      <span className="font-mono">
         {first}–{last} of {total}
       </span>
-      <div className="pager__buttons">
-        <button type="button" className="button" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 text-[12px] rounded-[5px]"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+        >
           Previous
-        </button>
-        <button
-          type="button"
-          className="button"
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-7 text-[12px] rounded-[5px]"
           disabled={page >= pageCount}
           onClick={() => onPageChange(page + 1)}
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );
