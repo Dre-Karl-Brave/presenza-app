@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Suspense>
           </main>
           <footer className="py-4 text-center text-xs text-muted-foreground/50">
-            Synthetic data only — no real student information is stored.
+            © 2026 Presenza
           </footer>
         </Providers>
       </body>

@@ -123,13 +123,15 @@ export function AppSidebar() {
       <SidebarFooter className="p-0 overflow-hidden">
         <div className="flex items-center gap-[9px] px-[14px] py-[11px] overflow-hidden">
           <div className="w-[26px] h-[26px] bg-sidebar-foreground/10 rounded-[5px] flex items-center justify-center shrink-0 border border-sidebar-border">
-            <span className="text-sidebar-foreground text-[11px] font-bold">P</span>
+            <span className="text-sidebar-foreground text-[11px] font-bold">
+              P
+            </span>
           </div>
           <div className="group-data-[collapsible=icon]:hidden min-w-0 flex-1">
             <div className="text-[12.5px] font-semibold text-sidebar-foreground truncate">
               Presenza
             </div>
-            <div className="text-[11px] text-sidebar-foreground/40">Synthetic data</div>
+            <div className="text-[11px] text-sidebar-foreground/40">© 2026</div>
           </div>
           <ThemeToggle className="shrink-0 group-data-[collapsible=icon]:hidden text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent" />
         </div>
