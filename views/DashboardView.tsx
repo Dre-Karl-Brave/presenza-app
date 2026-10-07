@@ -146,7 +146,7 @@ export function DashboardView() {
   const summary = useSummary();
   const breakdown = useStatusBreakdown();
   const data = summary.data;
-  const loading = summary.isPending;
+  const loading = summary.isPending || summary.isPlaceholderData;
   const noRecords = data !== undefined && data.stats.total === 0;
   const shares = breakdown.data ? sharePoints(breakdown.data) : [];
   const bdStatus = statusOf(breakdown, (v) => v.stats.total === 0);
