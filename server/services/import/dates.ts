@@ -52,6 +52,13 @@ function monthFromName(name: string): number | null {
   return MONTH_ABBRS[name.slice(0, 3).toLowerCase()] ?? null;
 }
 
+// Pivot matches the common strtotime/Excel convention: 00-68 -> 2000s, 69-99 -> 1900s.
+function expandYear(yearText: string): number {
+  if (yearText.length === 4) return Number(yearText);
+  const yy = Number(yearText);
+  return yy <= 68 ? 2000 + yy : 1900 + yy;
+}
+
 /**
  * Accepts common date text formats and returns the ISO YYYY-MM-DD equivalent,
  * or null if the input cannot be parsed. Supported formats:
@@ -60,6 +67,7 @@ function monthFromName(name: string): number | null {
  *   DD/MM/YYYY, D/M/YYYY  (EU slash — used when first number > 12)
  *   MM-DD-YYYY, DD-MM-YYYY (same logic with dashes)
  *   DD Mon YYYY, Mon DD YYYY, DD Month YYYY, Month DD YYYY
+ *   Any of the slash/dash forms above also accept a 2-digit year (e.g. 8/17/26).
  */
 export function normalizeDate(raw: string): string | null {
   const s = raw.trim();
@@ -72,23 +80,23 @@ export function normalizeDate(raw: string): string | null {
   const ymdSlash = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/.exec(s);
   if (ymdSlash) return tryIso(Number(ymdSlash[1]), Number(ymdSlash[2]), Number(ymdSlash[3]));
 
-  // MM/DD/YYYY or DD/MM/YYYY (slash or dot separators, 1- or 2-digit parts)
-  const dmySlash = /^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})$/.exec(s);
+  // MM/DD/YYYY or DD/MM/YYYY (slash or dot separators, 1- or 2-digit parts, 2- or 4-digit year)
+  const dmySlash = /^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4}|\d{2})$/.exec(s);
   if (dmySlash) {
     const a = Number(dmySlash[1]);
     const b = Number(dmySlash[2]);
-    const yr = Number(dmySlash[3]);
+    const yr = expandYear(dmySlash[3]);
     if (a > 12) return tryIso(yr, b, a); // first part is definitely day
     if (b > 12) return tryIso(yr, a, b); // second part is definitely day
     return tryIso(yr, a, b); // ambiguous — treat as MM/DD (US default)
   }
 
   // MM-DD-YYYY or DD-MM-YYYY (dash separators, guards against matching YYYY-MM-DD above)
-  const dmyDash = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(s);
+  const dmyDash = /^(\d{1,2})-(\d{1,2})-(\d{4}|\d{2})$/.exec(s);
   if (dmyDash) {
     const a = Number(dmyDash[1]);
     const b = Number(dmyDash[2]);
-    const yr = Number(dmyDash[3]);
+    const yr = expandYear(dmyDash[3]);
     if (a > 12) return tryIso(yr, b, a);
     if (b > 12) return tryIso(yr, a, b);
     return tryIso(yr, a, b); // ambiguous — treat as MM-DD

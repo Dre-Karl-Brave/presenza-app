@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { formatNumber } from "@/lib/format";
 import { useClearAllData } from "@/lib/import-client";
 
 const CONFIRM_WORD = "CLEAR";
@@ -11,10 +10,6 @@ const CONFIRM_WORD = "CLEAR";
 export function ClearAllCard() {
   const [typed, setTyped] = useState("");
   const clear = useClearAllData();
-
-  const removedTotal = clear.data
-    ? Object.values(clear.data.removed).reduce((sum, count) => sum + count, 0)
-    : 0;
 
   return (
     <div className="bg-card border border-destructive/30 rounded-[6px] overflow-hidden">
@@ -45,14 +40,6 @@ export function ClearAllCard() {
             {clear.isPending ? "Clearing…" : "Clear all data"}
           </Button>
         </div>
-        {clear.isError ? (
-          <p className="text-[12px] text-destructive">{clear.error.message}</p>
-        ) : null}
-        {clear.data ? (
-          <p className="text-[12.5px] text-[#16a34a]">
-            Cleared {formatNumber(removedTotal)} rows. The system is now empty.
-          </p>
-        ) : null}
       </div>
     </div>
   );

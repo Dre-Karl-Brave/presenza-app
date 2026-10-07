@@ -119,7 +119,7 @@ describe("validateTable on CSV", () => {
       [7, "class end"],
       [9, "student number"],
     ]);
-    expect(result.errors[0].message).toContain("real date");
+    expect(result.errors[0].message).toContain("must be a valid date");
     expect(result.errors[6].message).toContain("duplicate of row 8");
   });
 

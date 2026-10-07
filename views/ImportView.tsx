@@ -8,7 +8,7 @@ import { DataTable, type Column } from "@/components/DataTable";
 import { StatCard } from "@/components/StatCard";
 import { LoadingState, ErrorState } from "@/components/StateView";
 import { formatNumber } from "@/lib/format";
-import { useImportCommit, useImportPreview } from "@/lib/import-client";
+import { downloadImportTemplate, useImportCommit, useImportPreview } from "@/lib/import-client";
 import { cn } from "@/lib/utils";
 import type { ImportError } from "@/server/services/import";
 import { ClearAllCard } from "./ClearAllCard";
@@ -70,11 +70,13 @@ export function ImportView() {
       {/* 1. Template */}
       <Section title="1. Get the template" sub="one row per student per class meeting">
         <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
-            <a href="/api/import/template?format=csv" download>Download CSV</a>
+          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]"
+            onClick={() => downloadImportTemplate("csv")}>
+            Download CSV
           </Button>
-          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
-            <a href="/api/import/template?format=xlsx" download>Download XLSX</a>
+          <Button variant="outline" size="sm" className="h-7 text-[12.5px] rounded-[5px]"
+            onClick={() => downloadImportTemplate("xlsx")}>
+            Download XLSX
           </Button>
         </div>
       </Section>
@@ -206,12 +208,6 @@ export function ImportView() {
               </div>
             ) : null}
 
-            {commit.isError ? (
-              <div className="text-[12.5px] text-destructive bg-destructive/8 rounded-[5px] px-4 py-2">
-                {commit.error.message}
-              </div>
-            ) : null}
-
             <div className="flex gap-2 flex-wrap">
               <Button
                 size="sm"
@@ -232,13 +228,6 @@ export function ImportView() {
 
       {commit.data ? (
         <div className="bg-card border border-border rounded-[6px] p-[18px] space-y-4">
-          <p className="text-[12.5px] text-[#16a34a] bg-[#16a34a]/8 rounded-[5px] px-4 py-2">
-            Imported {formatNumber(commit.data.validRows)} rows:{" "}
-            {formatNumber(commit.data.summary.logsCreated)} new,{" "}
-            {formatNumber(commit.data.summary.logsUpdated)} updated,{" "}
-            {formatNumber(commit.data.summary.logsUnchanged)} already there.
-            {commit.data.invalidRows > 0 ? ` ${formatNumber(commit.data.invalidRows)} invalid rows skipped.` : ""}
-          </p>
           <div className="flex gap-2">
             <Button size="sm" className="h-7 text-[12.5px] rounded-[5px]" asChild>
               <Link href="/">View dashboard</Link>

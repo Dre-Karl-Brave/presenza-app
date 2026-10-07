@@ -53,11 +53,6 @@ export function ImportHistory() {
         <span className="text-[13px] font-semibold text-foreground">Import history</span>
         <span className="text-[12px] text-muted-foreground ml-2">undo removes the records an import created</span>
       </div>
-      {undo.isError ? (
-        <div className="mx-[18px] mt-3 text-[12px] text-destructive bg-destructive/8 rounded-[5px] px-3 py-2">
-          {undo.error.message}
-        </div>
-      ) : null}
       <DataTable
         columns={columns}
         rows={history.data ?? []}
