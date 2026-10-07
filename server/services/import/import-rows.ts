@@ -1,4 +1,4 @@
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import { attendanceLogs, emptyCreatedIds, importBatches } from "@/db/schema";
 import { chunk, type Ctx, type Tx } from "./context";
 import { isoDayOfWeek, roundToHalfHour, wallClock } from "./dates";
@@ -265,6 +265,7 @@ async function applyRows(tx: Tx, rows: ImportRow[], options: ImportOptions): Pro
   }
 
   const toInsert: LogValues[] = [];
+  const toUpdate: LogValues[] = [];
   for (const [key, value] of desired) {
     const current = existingLogs.get(key);
     if (!current) {
@@ -286,14 +287,34 @@ async function applyRows(tx: Tx, rows: ImportRow[], options: ImportOptions): Pro
       continue;
     }
     if (current.deleted) ctx.summary.revived += 1;
-    await tx
-      .update(attendanceLogs)
-      .set({ ...value, deleted: false })
-      .where(eq(attendanceLogs.id, current.id));
+    toUpdate.push(value);
     ctx.summary.logsUpdated += 1;
   }
   for (const part of chunk(toInsert, 1000)) {
     await tx.insert(attendanceLogs).values(part);
+  }
+  // Changed rows already exist (unique on session_id, student_id), so a chunked
+  // upsert replaces what used to be one awaited UPDATE per row.
+  for (const part of chunk(toUpdate, 1000)) {
+    await tx
+      .insert(attendanceLogs)
+      .values(part)
+      .onConflictDoUpdate({
+        target: [attendanceLogs.sessionId, attendanceLogs.studentId],
+        set: {
+          status: sql`excluded.status`,
+          timeIn: sql`excluded.time_in`,
+          timeOut: sql`excluded.time_out`,
+          logMethod: sql`excluded.log_method`,
+          leftEarly: sql`excluded.left_early`,
+          minutesLate: sql`excluded.minutes_late`,
+          minutesInClass: sql`excluded.minutes_in_class`,
+          timeInHour: sql`excluded.time_in_hour`,
+          timeOutHour: sql`excluded.time_out_hour`,
+          importBatchId: sql`excluded.import_batch_id`,
+          deleted: false,
+        },
+      });
   }
   ctx.summary.logsCreated += toInsert.length;
 
