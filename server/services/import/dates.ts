@@ -38,6 +38,79 @@ export function isRealDate(isoDate: string): boolean {
   return toIsoDate(toUtc(isoDate)) === isoDate;
 }
 
+function tryIso(year: number, month: number, day: number): string | null {
+  const iso = `${year}-${pad(month)}-${pad(day)}`;
+  return isRealDate(iso) ? iso : null;
+}
+
+const MONTH_ABBRS: Record<string, number> = {
+  jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
+  jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12,
+};
+
+function monthFromName(name: string): number | null {
+  return MONTH_ABBRS[name.slice(0, 3).toLowerCase()] ?? null;
+}
+
+/**
+ * Accepts common date text formats and returns the ISO YYYY-MM-DD equivalent,
+ * or null if the input cannot be parsed. Supported formats:
+ *   YYYY-MM-DD, YYYY/MM/DD
+ *   MM/DD/YYYY, M/D/YYYY  (US slash — default when day and month are both ≤ 12)
+ *   DD/MM/YYYY, D/M/YYYY  (EU slash — used when first number > 12)
+ *   MM-DD-YYYY, DD-MM-YYYY (same logic with dashes)
+ *   DD Mon YYYY, Mon DD YYYY, DD Month YYYY, Month DD YYYY
+ */
+export function normalizeDate(raw: string): string | null {
+  const s = raw.trim();
+  if (!s) return null;
+
+  // Already ISO
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return isRealDate(s) ? s : null;
+
+  // YYYY/MM/DD
+  const ymdSlash = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/.exec(s);
+  if (ymdSlash) return tryIso(Number(ymdSlash[1]), Number(ymdSlash[2]), Number(ymdSlash[3]));
+
+  // MM/DD/YYYY or DD/MM/YYYY (slash or dot separators, 1- or 2-digit parts)
+  const dmySlash = /^(\d{1,2})[\/\.](\d{1,2})[\/\.](\d{4})$/.exec(s);
+  if (dmySlash) {
+    const a = Number(dmySlash[1]);
+    const b = Number(dmySlash[2]);
+    const yr = Number(dmySlash[3]);
+    if (a > 12) return tryIso(yr, b, a); // first part is definitely day
+    if (b > 12) return tryIso(yr, a, b); // second part is definitely day
+    return tryIso(yr, a, b); // ambiguous — treat as MM/DD (US default)
+  }
+
+  // MM-DD-YYYY or DD-MM-YYYY (dash separators, guards against matching YYYY-MM-DD above)
+  const dmyDash = /^(\d{1,2})-(\d{1,2})-(\d{4})$/.exec(s);
+  if (dmyDash) {
+    const a = Number(dmyDash[1]);
+    const b = Number(dmyDash[2]);
+    const yr = Number(dmyDash[3]);
+    if (a > 12) return tryIso(yr, b, a);
+    if (b > 12) return tryIso(yr, a, b);
+    return tryIso(yr, a, b); // ambiguous — treat as MM-DD
+  }
+
+  // "Jan 5, 2024" / "January 5 2024" / "Jan 05 2024"
+  const mNameFirst = /^([A-Za-z]+)\s+(\d{1,2})[,\s]+(\d{4})$/.exec(s);
+  if (mNameFirst) {
+    const month = monthFromName(mNameFirst[1]);
+    if (month) return tryIso(Number(mNameFirst[3]), month, Number(mNameFirst[2]));
+  }
+
+  // "5 Jan 2024" / "05 January 2024"
+  const dFirst = /^(\d{1,2})\s+([A-Za-z]+)[,\s]+(\d{4})$/.exec(s);
+  if (dFirst) {
+    const month = monthFromName(dFirst[2]);
+    if (month) return tryIso(Number(dFirst[3]), month, Number(dFirst[1]));
+  }
+
+  return null;
+}
+
 export function addDays(isoDate: string, days: number): string {
   return toIsoDate(new Date(toUtc(isoDate).getTime() + days * DAY_MS));
 }

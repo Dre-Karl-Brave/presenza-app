@@ -1,5 +1,5 @@
 import { COLUMNS, columnHeader, mapHeaders, type ColumnKey } from "./columns";
-import { addDays, dayName, isoDayOfWeek, parseTime, toIsoDate } from "./dates";
+import { addDays, dayName, isoDayOfWeek, normalizeDate, parseTime, toIsoDate } from "./dates";
 import { splitName } from "./names";
 import { rowSchema } from "./row-schema";
 import { ImportFileError, type ImportError, type ImportRow, type RawCell, type RawTable } from "./types";
@@ -26,7 +26,9 @@ function cellToText(key: ColumnKey, cell: RawCell | undefined): string {
     }
     return String(cell);
   }
-  return String(cell).trim();
+  const text = String(cell).trim();
+  if (key === "date") return normalizeDate(text) ?? text;
+  return text;
 }
 
 function isBlank(cells: RawCell[]): boolean {

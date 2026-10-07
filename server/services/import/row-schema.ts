@@ -24,7 +24,7 @@ export const rowSchema = z
     ),
     subjectCode: requiredText(15),
     section: requiredText(30),
-    date: requiredText(10).refine(isRealDate, "must be a real date written as YYYY-MM-DD"),
+    date: z.string().trim().min(1, "is required").refine(isRealDate, "must be a valid date (e.g. 2024-01-15, 01/15/2024, 15/01/2024, or 15 Jan 2024)"),
     timeIn: optionalTime,
     timeOut: optionalTime,
     status: z.preprocess(
