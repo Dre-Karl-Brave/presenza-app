@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { motion } from "motion/react";
 import type { ViewStatus } from "@/lib/status";
 import { StateView } from "./StateView";
 
@@ -18,7 +21,12 @@ export function ChartCard({
   children: ReactNode;
 }) {
   return (
-    <div className="bg-card border border-border rounded-[6px] overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="bg-card border border-border rounded-[6px] overflow-hidden"
+    >
       <div className="flex items-start justify-between gap-4 px-5 py-[13px] border-b border-border">
         <div>
           <div className="text-[13px] font-semibold text-foreground leading-snug">{title}</div>
@@ -31,6 +39,6 @@ export function ChartCard({
       <div className="p-5">
         {status === "ready" ? children : <StateView status={status} emptyMessage={emptyMessage} />}
       </div>
-    </div>
+    </motion.div>
   );
 }

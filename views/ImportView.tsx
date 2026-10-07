@@ -132,20 +132,58 @@ export function ImportView() {
           <div className="flex flex-col gap-[14px]">
             <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-[14px]">
               <StatCard label="Rows read" value={formatNumber(previewData.rowsRead)} />
-              <StatCard label="Valid rows" value={formatNumber(previewData.validRows)} />
-              <StatCard label="Invalid rows" value={formatNumber(previewData.invalidRows)} hint="Skipped" />
-              <StatCard label="New records" value={formatNumber(previewData.summary.logsCreated)} />
-              <StatCard label="Updated" value={formatNumber(previewData.summary.logsUpdated)} />
+              <StatCard
+                label="Valid rows"
+                value={formatNumber(previewData.validRows)}
+                hint={previewData.validRows === 0 ? "Nothing to import" : undefined}
+              />
+              <StatCard label="Invalid rows" value={formatNumber(previewData.invalidRows)} hint={previewData.invalidRows > 0 ? "Skipped" : undefined} />
+              <StatCard
+                label="New records"
+                value={formatNumber(previewData.summary.logsCreated)}
+                hint={
+                  previewData.summary.logsCreated === 0
+                    ? previewData.summary.logsUnchanged > 0
+                      ? "All already exist"
+                      : previewData.summary.logsUpdated > 0
+                        ? "All were updates"
+                        : previewData.validRows === 0
+                          ? "No valid rows"
+                          : undefined
+                    : undefined
+                }
+              />
+              <StatCard
+                label="Updated"
+                value={formatNumber(previewData.summary.logsUpdated)}
+                hint={previewData.summary.logsUpdated === 0 ? "No changes detected" : undefined}
+              />
               <StatCard label="Unchanged" value={formatNumber(previewData.summary.logsUnchanged)} />
             </div>
 
             <p className="text-[12.5px] text-muted-foreground">
-              This would also create {formatNumber(previewData.summary.studentsCreated)} students,{" "}
-              {formatNumber(previewData.summary.subjectsCreated)} subjects,{" "}
-              {formatNumber(previewData.summary.sectionsCreated)} sections,{" "}
-              {formatNumber(previewData.summary.classesCreated)} classes and{" "}
-              {formatNumber(previewData.summary.sessionsCreated)} sessions
-              {previewData.summary.revived > 0 ? `, and bring back ${formatNumber(previewData.summary.revived)} removed rows` : ""}.
+              {(() => {
+                const s = previewData.summary;
+                const parts: string[] = [];
+                if (s.studentsCreated > 0) parts.push(`${formatNumber(s.studentsCreated)} students`);
+                if (s.subjectsCreated > 0) parts.push(`${formatNumber(s.subjectsCreated)} subjects`);
+                if (s.sectionsCreated > 0) parts.push(`${formatNumber(s.sectionsCreated)} sections`);
+                if (s.classesCreated > 0) parts.push(`${formatNumber(s.classesCreated)} classes`);
+                if (s.sessionsCreated > 0) parts.push(`${formatNumber(s.sessionsCreated)} sessions`);
+                if (s.revived > 0) parts.push(`${formatNumber(s.revived)} removed rows restored`);
+
+                const allZero =
+                  s.studentsCreated === 0 &&
+                  s.subjectsCreated === 0 &&
+                  s.sectionsCreated === 0 &&
+                  s.classesCreated === 0 &&
+                  s.sessionsCreated === 0;
+
+                if (allZero) {
+                  return "No new students, subjects, sections, classes, or sessions — all already exist in the database.";
+                }
+                return `This would also create ${parts.join(", ")}.`;
+              })()}
             </p>
 
             {previewData.errors.length > 0 ? (

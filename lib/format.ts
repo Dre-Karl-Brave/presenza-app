@@ -2,6 +2,17 @@
 
 const EMPTY = "n/a";
 
+export type DateFormat = "YYYY-MM-DD" | "MM/DD/YYYY" | "DD/MM/YYYY";
+
+export function formatDate(date: Date, fmt: DateFormat = "YYYY-MM-DD"): string {
+  const yyyy = String(date.getFullYear());
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  if (fmt === "MM/DD/YYYY") return `${mm}/${dd}/${yyyy}`;
+  if (fmt === "DD/MM/YYYY") return `${dd}/${mm}/${yyyy}`;
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 export function formatPercent(rate: number | null | undefined, digits = 1): string {
   if (rate === null || rate === undefined) return EMPTY;
   return `${(rate * 100).toFixed(digits)}%`;

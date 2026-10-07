@@ -8,6 +8,16 @@ import {
   getStudentReport,
 } from "@/server/services/analytics";
 import type { AnalyticsFilter } from "@/server/services/analytics/schemas";
+import type { DateFormat } from "@/lib/format";
+
+function formatDateServer(date: Date, fmt: DateFormat): string {
+  const yyyy = String(date.getFullYear());
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  if (fmt === "MM/DD/YYYY") return `${mm}/${dd}/${yyyy}`;
+  if (fmt === "DD/MM/YYYY") return `${dd}/${mm}/${yyyy}`;
+  return `${yyyy}-${mm}-${dd}`;
+}
 
 // ── Inline filter parsing (mirrors lib/filters.ts without "use client") ───────
 
@@ -72,9 +82,19 @@ function rateStyle(sheet: ExcelJS.Worksheet, col: string, rowCount: number) {
 
 // ── Route handler ─────────────────────────────────────────────────────────────
 
+function appendGeneratedNote(sheet: ExcelJS.Worksheet, dateFmt: DateFormat) {
+  const generated = formatDateServer(new Date(), dateFmt);
+  sheet.addRow([]);
+  const noteRow = sheet.addRow([`Generated on: ${generated}`]);
+  noteRow.font = { italic: true, size: 10, color: { argb: "FF888888" } };
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type") ?? "students";
+  const rawFmt = searchParams.get("dateFmt") ?? "YYYY-MM-DD";
+  const dateFmt: DateFormat =
+    rawFmt === "MM/DD/YYYY" || rawFmt === "DD/MM/YYYY" ? rawFmt : "YYYY-MM-DD";
   const filter = parseFilter(searchParams);
 
   const wb = new ExcelJS.Workbook();
@@ -121,6 +141,7 @@ export async function GET(request: NextRequest) {
       }
 
       rateStyle(sheet, "H", data.rows.length);
+      appendGeneratedNote(sheet, dateFmt);
     }
 
     else if (type === "low-attendance") {
@@ -154,6 +175,7 @@ export async function GET(request: NextRequest) {
       }
 
       rateStyle(sheet, "H", data.rows.length);
+      appendGeneratedNote(sheet, dateFmt);
     }
 
     else if (type === "sections") {
@@ -183,6 +205,7 @@ export async function GET(request: NextRequest) {
       }
 
       rateStyle(sheet, "F", rows.length);
+      appendGeneratedNote(sheet, dateFmt);
     }
 
     else if (type === "subjects") {
@@ -214,6 +237,7 @@ export async function GET(request: NextRequest) {
       }
 
       rateStyle(sheet, "G", rows.length);
+      appendGeneratedNote(sheet, dateFmt);
     }
 
     else {

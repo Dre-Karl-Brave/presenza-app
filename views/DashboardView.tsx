@@ -1,8 +1,10 @@
 "use client";
 
+import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { FilterBar } from "@/components/FilterBar";
-import { EmptyState, LoadingState } from "@/components/StateView";
+import { EmptyState } from "@/components/StateView";
 import { chartTheme } from "@/lib/chart-theme";
 import { sharePoints } from "@/lib/chart-data";
 import { formatNumber, formatPercent } from "@/lib/format";
@@ -29,10 +31,15 @@ function KpiCard({
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           {label}
         </p>
-        <p className={cn("mt-2 text-[2.5rem] font-bold leading-none tabular-nums", valueClass)}>
-          {loading ? "…" : value}
-        </p>
-        {sub ? <p className="mt-2 text-xs text-muted-foreground">{sub}</p> : null}
+        {loading ? (
+          <Skeleton className="mt-2 h-10 w-24 rounded" />
+        ) : (
+          <p className={cn("mt-2 text-[2.5rem] font-bold leading-none tabular-nums", valueClass)}>
+            {value}
+          </p>
+        )}
+        {sub && !loading ? <p className="mt-2 text-xs text-muted-foreground">{sub}</p> : null}
+        {loading ? <Skeleton className="mt-2 h-3 w-32 rounded" /> : null}
       </CardContent>
     </Card>
   );
@@ -55,9 +62,11 @@ function CountCard({
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           {label}
         </p>
-        <p className={cn("mt-1.5 text-2xl font-bold tabular-nums", accent)}>
-          {loading ? "…" : value}
-        </p>
+        {loading ? (
+          <Skeleton className="mt-1.5 h-7 w-14 rounded" />
+        ) : (
+          <p className={cn("mt-1.5 text-2xl font-bold tabular-nums", accent)}>{value}</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -90,9 +99,12 @@ function StatusRow({
         </div>
       </div>
       <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-        <div
+        <motion.div
           className="h-full rounded-full"
-          style={{ width: `${pct}%`, background: color }}
+          style={{ background: color }}
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
         />
       </div>
     </div>
@@ -115,8 +127,17 @@ function Fact({
       <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
-      <p className="mt-1 text-2xl font-bold tabular-nums">{loading ? "…" : value}</p>
-      {sub ? <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p> : null}
+      {loading ? (
+        <>
+          <Skeleton className="mt-1 h-7 w-20 rounded" />
+          {sub ? <Skeleton className="mt-0.5 h-3 w-28 rounded" /> : null}
+        </>
+      ) : (
+        <>
+          <p className="mt-1 text-2xl font-bold tabular-nums">{value}</p>
+          {sub ? <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p> : null}
+        </>
+      )}
     </div>
   );
 }
@@ -159,7 +180,12 @@ export function DashboardView() {
       ) : null}
 
       {/* Row 1 — primary rate KPIs */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+        className="grid grid-cols-2 gap-4 xl:grid-cols-4"
+      >
         <KpiCard
           label="Attendance rate"
           value={formatPercent(data?.stats.attendanceRate)}
@@ -195,10 +221,15 @@ export function DashboardView() {
               : undefined
           }
         />
-      </div>
+      </motion.div>
 
       {/* Row 2 — raw counts */}
-      <div className="grid grid-cols-3 gap-4 sm:grid-cols-6">
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut", delay: 0.06 }}
+        className="grid grid-cols-3 gap-4 sm:grid-cols-6"
+      >
         <CountCard
           label="Present"
           value={data ? formatNumber(data.stats.present) : "0"}
@@ -232,10 +263,15 @@ export function DashboardView() {
           value={data ? formatNumber(data.stats.total) : "0"}
           loading={loading}
         />
-      </div>
+      </motion.div>
 
       {/* Row 3 — breakdown + facts */}
-      <div className="grid gap-4 lg:grid-cols-[1fr_240px]">
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut", delay: 0.12 }}
+        className="grid gap-4 lg:grid-cols-[1fr_240px]"
+      >
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-semibold">Attendance breakdown</CardTitle>
@@ -245,7 +281,17 @@ export function DashboardView() {
           </CardHeader>
           <CardContent>
             {bdStatus === "loading" ? (
-              <LoadingState />
+              <div className="flex flex-col gap-5" role="status" aria-label="Loading breakdown…">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                    <Skeleton className="h-2 w-full rounded-full" />
+                  </div>
+                ))}
+              </div>
             ) : bdStatus === "empty" ? (
               <EmptyState message="No records match these filters." />
             ) : (
@@ -303,7 +349,7 @@ export function DashboardView() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
     </>
   );
 }

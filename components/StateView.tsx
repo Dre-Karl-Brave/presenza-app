@@ -1,4 +1,5 @@
 import type { ViewStatus } from "@/lib/status";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function LoadingState({ label = "Loading…" }: { label?: string }) {
   return (
@@ -12,6 +13,19 @@ export function LoadingState({ label = "Loading…" }: { label?: string }) {
         aria-hidden="true"
       />
       <span className="text-[13px]">{label}</span>
+    </div>
+  );
+}
+
+export function ChartSkeleton() {
+  return (
+    <div className="min-h-[200px] space-y-2" role="status" aria-label="Loading chart…">
+      <Skeleton className="h-[160px] w-full rounded-md" />
+      <div className="flex gap-2 pt-1">
+        {[...Array(5)].map((_, i) => (
+          <Skeleton key={i} className="h-3 flex-1" />
+        ))}
+      </div>
     </div>
   );
 }
@@ -52,7 +66,7 @@ export function StateView({
   emptyTitle?: string;
   emptyMessage?: string;
 }) {
-  if (status === "loading") return <LoadingState />;
+  if (status === "loading") return <ChartSkeleton />;
   if (status === "error") return <ErrorState />;
   if (status === "empty") return <EmptyState title={emptyTitle} message={emptyMessage} />;
   return null;

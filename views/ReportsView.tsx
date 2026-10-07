@@ -6,12 +6,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { DataTable, type Column } from "@/components/DataTable";
 import { FilterBar } from "@/components/FilterBar";
 import { Pagination } from "@/components/Pagination";
 import { downloadCSV } from "@/lib/export";
-import { formatNumber, formatPercent } from "@/lib/format";
+import { formatNumber, formatPercent, type DateFormat } from "@/lib/format";
 import { useFilters } from "@/lib/filters";
 import {
   useBySection,
@@ -83,6 +90,12 @@ const sectionCols: Column<SectionRow>[] = [
   ...statColumns<SectionRow>(false),
 ];
 
+const DATE_FORMAT_OPTIONS: { value: DateFormat; label: string }[] = [
+  { value: "YYYY-MM-DD", label: "YYYY-MM-DD" },
+  { value: "MM/DD/YYYY", label: "MM/DD/YYYY" },
+  { value: "DD/MM/YYYY", label: "DD/MM/YYYY" },
+];
+
 /* ── Export buttons ── */
 function ExportCSVButton({ onClick, loading }: { onClick: () => void; loading?: boolean }) {
   return (
@@ -99,8 +112,19 @@ function ExportCSVButton({ onClick, loading }: { onClick: () => void; loading?: 
   );
 }
 
-function ExportXLSXButton({ type, queryString }: { type: string; queryString: string }) {
-  const href = `/api/export?type=${type}${queryString ? `&${queryString}` : ""}`;
+function ExportXLSXButton({
+  type,
+  queryString,
+  dateFmt,
+}: {
+  type: string;
+  queryString: string;
+  dateFmt: DateFormat;
+}) {
+  const params = new URLSearchParams(queryString || "");
+  params.set("type", type);
+  params.set("dateFmt", dateFmt);
+  const href = `/api/export?${params.toString()}`;
   return (
     <Button variant="outline" size="sm" className="gap-1.5" asChild>
       <a href={href} download>
@@ -116,16 +140,32 @@ function ExportActions({
   csvLoading,
   xlsxType,
   queryString,
+  dateFmt,
+  onDateFmtChange,
 }: {
   csvOnClick: () => void;
   csvLoading?: boolean;
   xlsxType: string;
   queryString: string;
+  dateFmt: DateFormat;
+  onDateFmtChange: (fmt: DateFormat) => void;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 flex-wrap">
+      <Select value={dateFmt} onValueChange={(v) => onDateFmtChange(v as DateFormat)}>
+        <SelectTrigger size="sm" className="h-8 w-[130px] text-[12px] rounded-[5px]">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {DATE_FORMAT_OPTIONS.map((opt) => (
+            <SelectItem key={opt.value} value={opt.value} className="text-[12px]">
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <ExportCSVButton onClick={csvOnClick} loading={csvLoading} />
-      <ExportXLSXButton type={xlsxType} queryString={queryString} />
+      <ExportXLSXButton type={xlsxType} queryString={queryString} dateFmt={dateFmt} />
     </div>
   );
 }
@@ -161,7 +201,7 @@ function ReportCard({
 }
 
 /* ── Student report ── */
-function StudentReportCard() {
+function StudentReportCard({ dateFmt, onDateFmtChange }: { dateFmt: DateFormat; onDateFmtChange: (fmt: DateFormat) => void }) {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<StudentReportParams["sortBy"]>("name");
   const [sortDir, setSortDir] = useState<StudentReportParams["sortDir"]>("asc");
@@ -203,7 +243,7 @@ function StudentReportCard() {
         })
       );
       downloadCSV(
-        "student-report.csv",
+        "student-report",
         ["Student No", "Name", "Section", "Present", "Late", "Absent", "Excused", "Attendance Rate"],
         data.rows.map((r) => [
           r.studentNo,
@@ -214,7 +254,8 @@ function StudentReportCard() {
           r.stats.absent,
           r.stats.excused,
           formatPercent(r.stats.attendanceRate),
-        ])
+        ]),
+        dateFmt,
       );
     } finally {
       setExporting(false);
@@ -231,6 +272,8 @@ function StudentReportCard() {
           csvLoading={exporting}
           xlsxType="students"
           queryString={queryString}
+          dateFmt={dateFmt}
+          onDateFmtChange={onDateFmtChange}
         />
       }
     >
@@ -273,6 +316,7 @@ export function ReportsView() {
   const [exportingLow, setExportingLow] = useState(false);
   const [exportingSections, setExportingSections] = useState(false);
   const [exportingSubjects, setExportingSubjects] = useState(false);
+  const [dateFmt, setDateFmt] = useState<DateFormat>("YYYY-MM-DD");
 
   const { queryString } = useFilters();
   const low = useLowAttendance();
@@ -284,7 +328,7 @@ export function ReportsView() {
     setExportingLow(true);
     try {
       downloadCSV(
-        "low-attendance.csv",
+        "low-attendance",
         ["Student No", "Name", "Section", "Present", "Late", "Absent", "Excused", "Attendance Rate"],
         low.data.rows.map((r) => [
           r.studentNo,
@@ -295,7 +339,8 @@ export function ReportsView() {
           r.stats.absent,
           r.stats.excused,
           formatPercent(r.stats.attendanceRate),
-        ])
+        ]),
+        dateFmt,
       );
     } finally {
       setExportingLow(false);
@@ -307,7 +352,7 @@ export function ReportsView() {
     setExportingSections(true);
     try {
       downloadCSV(
-        "section-report.csv",
+        "section-report",
         ["Section", "Present", "Late", "Absent", "Excused", "Attendance Rate"],
         sections.data.map((r) => [
           r.name,
@@ -316,7 +361,8 @@ export function ReportsView() {
           r.stats.absent,
           r.stats.excused,
           formatPercent(r.stats.attendanceRate),
-        ])
+        ]),
+        dateFmt,
       );
     } finally {
       setExportingSections(false);
@@ -328,7 +374,7 @@ export function ReportsView() {
     setExportingSubjects(true);
     try {
       downloadCSV(
-        "subject-report.csv",
+        "subject-report",
         ["Code", "Subject", "Present", "Late", "Absent", "Excused", "Attendance Rate"],
         subjects.data.map((r) => [
           r.code,
@@ -338,7 +384,8 @@ export function ReportsView() {
           r.stats.absent,
           r.stats.excused,
           formatPercent(r.stats.attendanceRate),
-        ])
+        ]),
+        dateFmt,
       );
     } finally {
       setExportingSubjects(false);
@@ -359,6 +406,8 @@ export function ReportsView() {
               csvLoading={exportingLow}
               xlsxType="low-attendance"
               queryString={queryString}
+              dateFmt={dateFmt}
+              onDateFmtChange={setDateFmt}
             />
           }
         >
@@ -371,7 +420,7 @@ export function ReportsView() {
           />
         </ReportCard>
 
-        <StudentReportCard />
+        <StudentReportCard dateFmt={dateFmt} onDateFmtChange={setDateFmt} />
 
         <ReportCard
           title="Section report"
@@ -381,6 +430,8 @@ export function ReportsView() {
               csvLoading={exportingSections}
               xlsxType="sections"
               queryString={queryString}
+              dateFmt={dateFmt}
+              onDateFmtChange={setDateFmt}
             />
           }
         >
@@ -401,6 +452,8 @@ export function ReportsView() {
               csvLoading={exportingSubjects}
               xlsxType="subjects"
               queryString={queryString}
+              dateFmt={dateFmt}
+              onDateFmtChange={setDateFmt}
             />
           }
         >
