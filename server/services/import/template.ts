@@ -3,8 +3,18 @@ import { COLUMNS, TEMPLATE_COLUMNS } from "./columns";
 
 export const TEMPLATE_BASENAME = "presenza-attendance-template";
 
+const SAMPLE_ROWS = [
+  ["2021-001234", "Santos, Maria", "IT301", "BSIT 3-A", "2026-01-15", "08:00", "09:30", "present", "08:00", "09:30"],
+  ["2021-005678", "Reyes, Juan", "IT301", "BSIT 3-A", "2026-01-15", "08:12", "09:30", "late", "08:00", "09:30"],
+  ["2021-009012", "Cruz, Ana", "IT301", "BSIT 3-A", "2026-01-15", "", "", "absent", "08:00", "09:30"],
+];
+
 export function templateCsv(): string {
-  return `${TEMPLATE_COLUMNS.map((column) => column.header).join(",")}\r\n`;
+  const header = TEMPLATE_COLUMNS.map((column) => column.header).join(",");
+  const samples = SAMPLE_ROWS.map((row) =>
+    row.map((cell) => (cell.includes(",") ? `"${cell}"` : cell)).join(","),
+  );
+  return [header, ...samples].join("\r\n") + "\r\n";
 }
 
 const DATE_COLUMN = 5;
@@ -24,6 +34,10 @@ export async function templateXlsx(): Promise<ArrayBuffer> {
   });
   data.getColumn(DATE_COLUMN).numFmt = "yyyy-mm-dd";
   for (const column of TIME_COLUMNS) data.getColumn(column).numFmt = "hh:mm";
+  for (const sampleRow of SAMPLE_ROWS) {
+    const row = data.addRow(sampleRow);
+    row.font = { italic: true, color: { argb: "FF999999" } };
+  }
   for (let row = 2; row <= VALIDATED_ROWS; row += 1) {
     data.getCell(`${STATUS_COLUMN_LETTER}${row}`).dataValidation = {
       type: "list",
